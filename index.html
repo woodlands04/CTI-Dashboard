@@ -6,7 +6,7 @@
   <title>Cyber-Financial Intelligence Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.7/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <style>
     :root {
       --bg-primary: #f7f8f7;
@@ -2198,46 +2198,46 @@
     });
 
     // ===== TREND CHARTS =====
-    const chartColors = {
-      red: '#a63d3d', redBg: 'rgba(166,61,61,0.1)',
-      amber: '#8b7a2f', amberBg: 'rgba(139,122,47,0.1)',
-      blue: '#4a6b49', blueBg: 'rgba(74,107,73,0.1)',
-      purple: '#6b7f6a', purpleBg: 'rgba(107,127,106,0.1)',
-      green: '#3d6b3c', greenBg: 'rgba(61,107,60,0.1)',
-      grid: 'rgba(107,127,106,0.12)', text: '#6b7f6a'
-    };
-
     const months = ['Okt 25','Nov 25','Dez 25','Jan 26','Feb 26','M\u00e4r 26'];
     const days7 = ['09. M\u00e4r','10. M\u00e4r','11. M\u00e4r','12. M\u00e4r','13. M\u00e4r','14. M\u00e4r','15. M\u00e4r'];
 
-    const chartDefaults = {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#151d2e',
-          borderColor: '#1e2d4a',
-          borderWidth: 1,
-          titleFont: { family: "'JetBrains Mono',monospace", size: 11 },
-          bodyFont: { family: "'IBM Plex Sans',sans-serif", size: 12 },
-          padding: 10,
-          cornerRadius: 6
-        }
-      },
-      scales: {
-        x: {
-          grid: { color: chartColors.grid, drawBorder: false },
-          ticks: { color: chartColors.text, font: { family: "'JetBrains Mono',monospace", size: 10 } }
-        },
-        y: {
-          grid: { color: chartColors.grid, drawBorder: false },
-          ticks: { color: chartColors.text, font: { family: "'JetBrains Mono',monospace", size: 10 } }
-        }
-      }
-    };
-
     // ===== 7-DAY CHARTS =====
+    function makeOpts(yCallback) {
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#fff',
+            titleColor: '#000',
+            bodyColor: '#3a3a3a',
+            borderColor: '#d4dbd4',
+            borderWidth: 1,
+            titleFont: { family: "'JetBrains Mono',monospace", size: 11 },
+            bodyFont: { family: "'IBM Plex Sans',sans-serif", size: 12 },
+            padding: 10,
+            cornerRadius: 6
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(107,127,106,0.12)', drawBorder: false },
+            ticks: { color: '#6b7f6a', font: { family: "'JetBrains Mono',monospace", size: 10 } }
+          },
+          y: {
+            grid: { color: 'rgba(107,127,106,0.12)', drawBorder: false },
+            ticks: {
+              color: '#6b7f6a',
+              font: { family: "'JetBrains Mono',monospace", size: 10 },
+              callback: yCallback || function(v) { return v; }
+            },
+            beginAtZero: false
+          }
+        }
+      };
+    }
+
     new Chart(document.getElementById('chart7dInc'), {
       type: 'bar',
       data: {
@@ -2245,12 +2245,12 @@
         datasets: [{
           label: 'Vorf\u00e4lle',
           data: [8, 11, 9, 19, 23, 16, 12],
-          backgroundColor: [chartColors.blueBg,chartColors.blueBg,chartColors.blueBg,chartColors.redBg,chartColors.redBg,chartColors.amberBg,chartColors.blueBg],
-          borderColor: [chartColors.blue,chartColors.blue,chartColors.blue,chartColors.red,chartColors.red,chartColors.amber,chartColors.blue],
+          backgroundColor: ['rgba(74,107,73,0.15)','rgba(74,107,73,0.15)','rgba(74,107,73,0.15)','rgba(166,61,61,0.15)','rgba(166,61,61,0.15)','rgba(139,122,47,0.15)','rgba(74,107,73,0.15)'],
+          borderColor: ['#4a6b49','#4a6b49','#4a6b49','#a63d3d','#a63d3d','#8b7a2f','#4a6b49'],
           borderWidth: 1.5, borderRadius: 4
         }]
       },
-      options: chartDefaults
+      options: makeOpts()
     });
 
     new Chart(document.getElementById('chart7dKEV'), {
@@ -2260,12 +2260,12 @@
         datasets: [{
           label: 'KEV-Eintr\u00e4ge',
           data: [2, 1, 0, 5, 3, 1, 2],
-          backgroundColor: [chartColors.amberBg,chartColors.blueBg,chartColors.blueBg,chartColors.redBg,chartColors.redBg,chartColors.blueBg,chartColors.amberBg],
-          borderColor: [chartColors.amber,chartColors.blue,chartColors.blue,chartColors.red,chartColors.red,chartColors.blue,chartColors.amber],
+          backgroundColor: ['rgba(139,122,47,0.15)','rgba(74,107,73,0.15)','rgba(74,107,73,0.15)','rgba(166,61,61,0.15)','rgba(166,61,61,0.15)','rgba(74,107,73,0.15)','rgba(139,122,47,0.15)'],
+          borderColor: ['#8b7a2f','#4a6b49','#4a6b49','#a63d3d','#a63d3d','#4a6b49','#8b7a2f'],
           borderWidth: 1.5, borderRadius: 4
         }]
       },
-      options: chartDefaults
+      options: makeOpts()
     });
 
     // ===== MONTHLY CHARTS =====
@@ -2276,12 +2276,12 @@
         datasets: [{
           label: 'CVEs/Tag',
           data: [96, 105, 112, 119, 128, 142],
-          borderColor: chartColors.red,
-          backgroundColor: chartColors.redBg,
+          borderColor: '#a63d3d',
+          backgroundColor: 'rgba(166,61,61,0.08)',
           fill: true, tension: 0.35, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2
         }]
       },
-      options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: false } } }
+      options: makeOpts()
     });
 
     new Chart(document.getElementById('chartRansom'), {
@@ -2291,12 +2291,12 @@
         datasets: [{
           label: 'Vorf\u00e4lle',
           data: [72, 81, 95, 88, 103, 118],
-          backgroundColor: [chartColors.amberBg,chartColors.amberBg,chartColors.redBg,chartColors.amberBg,chartColors.redBg,chartColors.redBg],
-          borderColor: [chartColors.amber,chartColors.amber,chartColors.red,chartColors.amber,chartColors.red,chartColors.red],
-          borderWidth: 1, borderRadius: 4
+          backgroundColor: ['rgba(139,122,47,0.15)','rgba(139,122,47,0.15)','rgba(166,61,61,0.15)','rgba(139,122,47,0.15)','rgba(166,61,61,0.15)','rgba(166,61,61,0.15)'],
+          borderColor: ['#8b7a2f','#8b7a2f','#a63d3d','#8b7a2f','#a63d3d','#a63d3d'],
+          borderWidth: 1.5, borderRadius: 4
         }]
       },
-      options: chartDefaults
+      options: makeOpts()
     });
 
     new Chart(document.getElementById('chartPhishing'), {
@@ -2306,12 +2306,12 @@
         datasets: [{
           label: 'Phishing-Index',
           data: [100, 112, 124, 138, 155, 178],
-          borderColor: chartColors.purple,
-          backgroundColor: chartColors.purpleBg,
+          borderColor: '#6b7f6a',
+          backgroundColor: 'rgba(107,127,106,0.08)',
           fill: true, tension: 0.35, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2
         }]
       },
-      options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: false } } }
+      options: makeOpts()
     });
 
     new Chart(document.getElementById('chartInsurance'), {
@@ -2321,16 +2321,12 @@
         datasets: [{
           label: '\u0394 YoY %',
           data: [-6.8, -5.2, -3.1, 2.4, 8.5, 15],
-          backgroundColor: function(ctx) {
-            return ctx.raw < 0 ? chartColors.greenBg : chartColors.redBg;
-          },
-          borderColor: function(ctx) {
-            return ctx.raw < 0 ? chartColors.green : chartColors.red;
-          },
-          borderWidth: 1, borderRadius: 4
+          backgroundColor: ['rgba(61,107,60,0.15)','rgba(61,107,60,0.15)','rgba(61,107,60,0.15)','rgba(166,61,61,0.15)','rgba(166,61,61,0.15)','rgba(166,61,61,0.15)'],
+          borderColor: ['#3d6b3c','#3d6b3c','#3d6b3c','#a63d3d','#a63d3d','#a63d3d'],
+          borderWidth: 1.5, borderRadius: 4
         }]
       },
-      options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, ticks: { ...chartDefaults.scales.y.ticks, callback: function(v){return v+'%';} } } } }
+      options: makeOpts(function(v) { return v + '%'; })
     });
   </script>
 </body>
