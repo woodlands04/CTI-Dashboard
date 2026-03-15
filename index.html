@@ -6,36 +6,37 @@
   <title>Cyber-Financial Intelligence Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.7/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg-primary: #0a0e17;
-      --bg-secondary: #111827;
-      --bg-card: #151d2e;
-      --bg-card-hover: #1a2540;
-      --border: #1e2d4a;
-      --border-active: #2563eb;
-      --text-primary: #e2e8f0;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --accent-blue: #3b82f6;
-      --accent-cyan: #06b6d4;
-      --accent-green: #10b981;
-      --accent-amber: #f59e0b;
-      --accent-red: #ef4444;
-      --accent-purple: #8b5cf6;
-      --critical: #dc2626;
-      --critical-bg: rgba(220, 38, 38, 0.08);
-      --critical-border: rgba(220, 38, 38, 0.25);
-      --high: #f59e0b;
-      --high-bg: rgba(245, 158, 11, 0.08);
-      --high-border: rgba(245, 158, 11, 0.25);
-      --medium: #3b82f6;
-      --medium-bg: rgba(59, 130, 246, 0.08);
-      --medium-border: rgba(59, 130, 246, 0.25);
-      --low: #10b981;
-      --low-bg: rgba(16, 185, 129, 0.08);
-      --glow-blue: 0 0 20px rgba(59, 130, 246, 0.15);
-      --glow-red: 0 0 20px rgba(220, 38, 38, 0.15);
+      --bg-primary: #f7f8f7;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f0f3f0;
+      --border: #d4dbd4;
+      --border-active: #6b7f6a;
+      --text-primary: #000000;
+      --text-secondary: #3a3a3a;
+      --text-muted: #6b7f6a;
+      --accent-blue: #4a6b49;
+      --accent-cyan: #5a7d59;
+      --accent-green: #3d6b3c;
+      --accent-amber: #8b7a2f;
+      --accent-red: #a63d3d;
+      --accent-purple: #6b7f6a;
+      --critical: #a63d3d;
+      --critical-bg: rgba(166, 61, 61, 0.07);
+      --critical-border: rgba(166, 61, 61, 0.25);
+      --high: #8b7a2f;
+      --high-bg: rgba(139, 122, 47, 0.07);
+      --high-border: rgba(139, 122, 47, 0.25);
+      --medium: #4a6b49;
+      --medium-bg: rgba(74, 107, 73, 0.07);
+      --medium-border: rgba(74, 107, 73, 0.25);
+      --low: #3d6b3c;
+      --low-bg: rgba(61, 107, 60, 0.07);
+      --glow-blue: 0 2px 12px rgba(107, 127, 106, 0.12);
+      --glow-red: 0 2px 12px rgba(166, 61, 61, 0.1);
       --font-mono: 'JetBrains Mono', monospace;
       --font-display: 'Space Grotesk', sans-serif;
       --font-body: 'IBM Plex Sans', sans-serif;
@@ -51,7 +52,7 @@
       min-height: 100vh;
     }
 
-    /* ===== SCANLINE OVERLAY ===== */
+    /* ===== SUBTLE TEXTURE ===== */
     body::before {
       content: '';
       position: fixed;
@@ -59,9 +60,9 @@
       background: repeating-linear-gradient(
         0deg,
         transparent,
-        transparent 2px,
-        rgba(0, 0, 0, 0.03) 2px,
-        rgba(0, 0, 0, 0.03) 4px
+        transparent 3px,
+        rgba(107, 127, 106, 0.02) 3px,
+        rgba(107, 127, 106, 0.02) 6px
       );
       pointer-events: none;
       z-index: 1000;
@@ -69,8 +70,8 @@
 
     /* ===== HEADER ===== */
     .header {
-      background: linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(10, 14, 23, 0.95) 100%);
-      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 2px solid #6b7f6a;
       padding: 1.25rem 2rem;
       position: sticky;
       top: 0;
@@ -95,7 +96,7 @@
     .logo-icon {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      background: #6b7f6a;
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -104,7 +105,7 @@
       font-weight: 700;
       color: #fff;
       font-family: var(--font-mono);
-      box-shadow: var(--glow-blue);
+      box-shadow: 0 2px 8px rgba(107,127,106,0.2);
     }
 
     .header-title {
@@ -112,9 +113,7 @@
       font-size: 1.3rem;
       font-weight: 600;
       letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #e2e8f0, #94a3b8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #000000;
     }
 
     .header-subtitle {
@@ -145,22 +144,22 @@
     }
 
     .status-live {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: var(--accent-green);
+      background: rgba(61, 107, 60, 0.1);
+      border: 1px solid rgba(61, 107, 60, 0.3);
+      color: #3d6b3c;
     }
 
     .status-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--accent-green);
+      background: #3d6b3c;
       animation: pulse 2s infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(61, 107, 60, 0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(61, 107, 60, 0); }
     }
 
     .timestamp {
@@ -253,7 +252,7 @@
       background: var(--bg-card-hover);
       border-color: var(--border-active);
       transform: translateY(-2px);
-      box-shadow: var(--glow-blue);
+      box-shadow: 0 4px 16px rgba(107,127,106,0.12);
     }
 
     .stat-label {
@@ -358,13 +357,13 @@
     }
 
     thead th {
-      background: rgba(30, 45, 74, 0.5);
+      background: #6b7f6a;
       font-family: var(--font-mono);
       font-size: 0.68rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--text-secondary);
+      color: #ffffff;
       padding: 0.75rem 1rem;
       text-align: left;
       border-bottom: 1px solid var(--border);
@@ -374,12 +373,12 @@
     }
 
     tbody tr {
-      border-bottom: 1px solid rgba(30, 45, 74, 0.3);
+      border-bottom: 1px solid rgba(107,127,106,0.12);
       transition: background 0.15s ease;
     }
 
     tbody tr:hover {
-      background: rgba(37, 99, 235, 0.04);
+      background: rgba(107,127,106,0.04);
     }
 
     tbody td {
@@ -693,8 +692,8 @@
       letter-spacing: 0.04em;
     }
 
-    .nav-tab:hover { color: var(--text-primary); background: rgba(59, 130, 246, 0.05); }
-    .nav-tab.active { color: var(--text-primary); background: var(--bg-card); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .nav-tab:hover { color: var(--text-primary); background: rgba(107,127,106,0.06); }
+    .nav-tab.active { color: #ffffff; background: #6b7f6a; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
@@ -730,16 +729,169 @@
       color: var(--text-secondary);
     }
 
+    /* ===== INFO POPUP ===== */
+    .has-info {
+      position: relative;
+      cursor: help;
+    }
+
+    .info-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--accent-blue);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      cursor: help;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .info-btn:hover {
+      background: rgba(59, 130, 246, 0.3);
+      transform: scale(1.1);
+    }
+
+    .info-popup {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      z-index: 999;
+      width: 320px;
+      max-width: 90vw;
+      background: #ffffff;
+      border: 1px solid #6b7f6a;
+      border-radius: 10px;
+      padding: 1rem 1.15rem;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 0 0 1px rgba(107,127,106,0.1);
+      pointer-events: auto;
+    }
+
+    .info-popup.show { display: block; animation: popIn 0.2s ease-out; }
+
+    .info-popup.anchor-right { left: auto; right: 0; }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .info-popup-title {
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-bottom: 0.4rem;
+    }
+
+    .info-popup-body {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .info-popup-body strong { color: var(--text-primary); }
+
+    .info-popup-source {
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(30,45,74,0.4);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text-muted);
+    }
+
+    .info-popup-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.6rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.2rem;
+    }
+
+    .info-popup-close:hover { color: var(--text-primary); }
+
+    /* ===== TREND CHARTS ===== */
+    .chart-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-section-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .chart-section-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .chart-card {
+      background: #f7f8f7;
+      border: 1px solid rgba(107,127,106,0.2);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .chart-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+
+    .chart-card-title {
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .chart-canvas-wrap {
+      position: relative;
+      height: 180px;
+    }
+
+    @media (max-width: 900px) {
+      .chart-grid { grid-template-columns: 1fr; }
+    }
+
     /* ===== CEO TAB HIGHLIGHT ===== */
     .nav-tab.ceo-tab {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.1));
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      color: var(--accent-purple);
+      background: rgba(107, 127, 106, 0.1);
+      border: 1px solid rgba(107, 127, 106, 0.4);
+      color: #4a5e49;
     }
     .nav-tab.ceo-tab:hover, .nav-tab.ceo-tab.active {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(59, 130, 246, 0.15));
+      background: #6b7f6a;
       color: #fff;
-      border-color: var(--accent-purple);
+      border-color: #6b7f6a;
     }
 
     /* ===== TRAFFIC LIGHT / AMPEL ===== */
@@ -994,8 +1146,8 @@
 
     /* ===== CTA ===== */
     .cta-section {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(59, 130, 246, 0.08));
-      border: 1px solid rgba(139, 92, 246, 0.3);
+      background: linear-gradient(135deg, rgba(107, 127, 106, 0.08), rgba(107, 127, 106, 0.04));
+      border: 2px solid #6b7f6a;
       border-radius: 14px;
       padding: 2rem 2.5rem;
       text-align: center;
@@ -1010,7 +1162,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle at 30% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+      background: radial-gradient(circle at 30% 50%, rgba(107, 127, 106, 0.04) 0%, transparent 50%);
       pointer-events: none;
     }
 
@@ -1022,9 +1174,9 @@
       letter-spacing: 0.08em;
       padding: 0.3rem 0.8rem;
       border-radius: 20px;
-      background: rgba(139,92,246,0.15);
-      color: var(--accent-purple);
-      border: 1px solid rgba(139,92,246,0.3);
+      background: rgba(107,127,106,0.1);
+      color: #6b7f6a;
+      border: 1px solid rgba(107,127,106,0.3);
       margin-bottom: 0.75rem;
     }
 
@@ -1033,9 +1185,7 @@
       font-size: 1.4rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
-      background: linear-gradient(135deg, #e2e8f0, #c4b5fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #000000;
     }
 
     .cta-subtitle {
@@ -1051,7 +1201,7 @@
       align-items: center;
       gap: 0.5rem;
       padding: 0.8rem 2rem;
-      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      background: #6b7f6a;
       color: #fff;
       font-family: var(--font-display);
       font-size: 0.9rem;
@@ -1061,12 +1211,13 @@
       cursor: pointer;
       transition: all 0.2s ease;
       text-decoration: none;
-      box-shadow: 0 4px 15px rgba(139,92,246,0.3);
+      box-shadow: 0 4px 15px rgba(107,127,106,0.25);
     }
 
     .cta-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(139,92,246,0.45);
+      box-shadow: 0 6px 25px rgba(107,127,106,0.35);
+      background: #5a6e59;
     }
 
     .cta-features {
@@ -1174,30 +1325,178 @@
 
     <!-- STATS ROW -->
     <div class="stats-row">
-      <div class="stat-card critical fade-in stagger-1">
-        <div class="stat-label">Kritische Bedrohungen</div>
+      <div class="stat-card critical fade-in stagger-1 has-info">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="stat-label">Kritische Bedrohungen</div>
+          <span class="info-btn" onclick="toggleInfo(event,'info-crit')">i</span>
+        </div>
         <div class="stat-value critical" id="statCritical">3</div>
         <div class="stat-change up">&#x25B2; +2 vs. Vorwoche</div>
+        <div class="info-popup anchor-right" id="info-crit">
+          <button class="info-popup-close" onclick="closeInfo('info-crit')">&times;</button>
+          <div class="info-popup-title">Kritische Bedrohungen</div>
+          <div class="info-popup-body">Anzahl der aktuell aktiven Bedrohungen mit <strong>Severity &ldquo;Critical&rdquo;</strong>. Eine Bedrohung gilt als kritisch, wenn sie aktiv ausgenutzt wird (Exploited in-the-wild), CVSS &ge; 9.0 aufweist oder eine CISA Emergency Directive ausgel&ouml;st hat. <strong>Warum relevant:</strong> Jede kritische Bedrohung erfordert sofortige Ma&szlig;nahmen innerhalb von 24&ndash;72h.</div>
+          <div class="info-popup-source">Quellen: CISA KEV, BSI Advisories, IBM X-Force</div>
+        </div>
       </div>
-      <div class="stat-card high fade-in stagger-2">
-        <div class="stat-label">Aktiv Exploited CVEs</div>
+      <div class="stat-card high fade-in stagger-2 has-info">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="stat-label">Aktiv Exploited CVEs</div>
+          <span class="info-btn" onclick="toggleInfo(event,'info-cve')">i</span>
+        </div>
         <div class="stat-value high" id="statCVE">7</div>
         <div class="stat-change up">&#x25B2; +3 vs. Vorwoche</div>
+        <div class="info-popup anchor-right" id="info-cve">
+          <button class="info-popup-close" onclick="closeInfo('info-cve')">&times;</button>
+          <div class="info-popup-title">Aktiv ausgenutzte Schwachstellen (CVEs)</div>
+          <div class="info-popup-body">CVE = <strong>Common Vulnerabilities and Exposures</strong> &mdash; eine standardisierte Kennung f&uuml;r bekannte Sicherheitsl&uuml;cken. &ldquo;Aktiv exploited&rdquo; bedeutet, dass Angreifer diese L&uuml;cken <strong>gerade jetzt</strong> ausnutzen. Das BSI entdeckt durchschnittlich <strong>119 neue Schwachstellen pro Tag</strong>. <strong>Warum relevant:</strong> Jede ungepatchte CVE ist eine offene T&uuml;r f&uuml;r Angreifer.</div>
+          <div class="info-popup-source">Quellen: CISA KEV Catalog, NVD, BSI Lagebericht 2025</div>
+        </div>
       </div>
-      <div class="stat-card medium fade-in stagger-3">
-        <div class="stat-label">CISA Emergency Directives</div>
+      <div class="stat-card medium fade-in stagger-3 has-info">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="stat-label">CISA Emergency Directives</div>
+          <span class="info-btn" onclick="toggleInfo(event,'info-ed')">i</span>
+        </div>
         <div class="stat-value blue">3</div>
         <div class="stat-change up">ED 26-01, 26-03, 25-02</div>
+        <div class="info-popup anchor-right" id="info-ed">
+          <button class="info-popup-close" onclick="closeInfo('info-ed')">&times;</button>
+          <div class="info-popup-title">CISA Emergency Directives</div>
+          <div class="info-popup-body"><strong>Emergency Directives</strong> sind Notfall-Anordnungen der US-Cybersicherheitsbeh&ouml;rde CISA bei akuter Bedrohung. Sie zwingen Bundesbeh&ouml;rden zum sofortigen Handeln. F&uuml;r EU-Unternehmen sind sie ein <strong>Fr&uuml;hwarnsignal</strong>: Wenn die USA Alarm schlagen, sind europ&auml;ische Systeme meist ebenfalls betroffen. <strong>Warum relevant:</strong> EDs zeigen die h&ouml;chste Dringlichkeitsstufe an.</div>
+          <div class="info-popup-source">Quelle: cisa.gov/directives</div>
+        </div>
       </div>
-      <div class="stat-card low fade-in stagger-4">
-        <div class="stat-label">Gesch. Gesamtrisiko p.a.</div>
+      <div class="stat-card low fade-in stagger-4 has-info">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="stat-label">Gesch. Gesamtrisiko p.a.</div>
+          <span class="info-btn" onclick="toggleInfo(event,'info-fair')">i</span>
+        </div>
         <div class="stat-value green">&euro;39&ndash;224M</div>
         <div class="stat-change">FAIR-aggregiert</div>
+        <div class="info-popup anchor-right" id="info-fair">
+          <button class="info-popup-close" onclick="closeInfo('info-fair')">&times;</button>
+          <div class="info-popup-title">FAIR-Risikomodell</div>
+          <div class="info-popup-body"><strong>FAIR</strong> = Factor Analysis of Information Risk. Ein quantitatives Modell zur Berechnung von Cyberrisiken in Euro. Formel: <strong>R = P &times; (L&#x2081; + L&#x2082;)</strong> wobei P = Eintrittswahrscheinlichkeit, L&#x2081; = Prim&auml;rverlust (z.B. Incident Response), L&#x2082; = Sekund&auml;rverlust (z.B. Bu&szlig;gelder, Reputationsschaden). <strong>Warum relevant:</strong> Macht Cyberrisiken f&uuml;r CFOs und Aufsichtsr&auml;te verst&auml;ndlich.</div>
+          <div class="info-popup-source">Framework: The Open Group / FAIR Institute</div>
+        </div>
       </div>
-      <div class="stat-card info fade-in stagger-5">
-        <div class="stat-label">Cyber-Vers. Pr&auml;mien 2026</div>
+      <div class="stat-card info fade-in stagger-5 has-info">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="stat-label">Cyber-Vers. Pr&auml;mien 2026</div>
+          <span class="info-btn" onclick="toggleInfo(event,'info-ins')">i</span>
+        </div>
         <div class="stat-value purple">+15%</div>
         <div class="stat-change">S&amp;P / Forrester Prognose</div>
+        <div class="info-popup" id="info-ins">
+          <button class="info-popup-close" onclick="closeInfo('info-ins')">&times;</button>
+          <div class="info-popup-title">Cyber-Versicherungspr&auml;mien</div>
+          <div class="info-popup-body">Globale Cyber-Versicherungspr&auml;mien erreichen 2026 ca. <strong>$16&ndash;23 Mrd.</strong> Versicherer verlangen zunehmend <strong>MFA, ISMS und Incident-Response-Pl&auml;ne</strong> als Voraussetzung f&uuml;r Deckung. Ohne diese Controls droht Pr&auml;mienaufschlag oder Deckungsverweigerung. <strong>Warum relevant:</strong> Ihr Versicherungsschutz h&auml;ngt direkt von Ihrem Security-Reifegrad ab.</div>
+          <div class="info-popup-source">Quellen: S&amp;P Global Ratings, Swiss Re, Forrester Research</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TREND CHARTS -->
+    <div class="chart-section fade-in">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div class="chart-section-title">Bedrohungslage im Zeitverlauf</div>
+          <div class="chart-section-sub">7-Tage-Vergleich (09.&ndash;15. M&auml;rz 2026) und monatliche Entwicklung | Quellen: BSI, CISA, IBM X-Force, Eye Security, Bitkom</div>
+        </div>
+        <span class="info-btn" onclick="toggleInfo(event,'info-trends')" style="margin-top:4px;">i</span>
+        <div class="info-popup anchor-right" id="info-trends">
+          <button class="info-popup-close" onclick="closeInfo('info-trends')">&times;</button>
+          <div class="info-popup-title">Zeitverlauf der Bedrohungslage</div>
+          <div class="info-popup-body">Die Charts zeigen die <strong>t&auml;gliche und monatliche Entwicklung</strong> wichtiger Indikatoren. Die 7-Tage-Ansicht zeigt den aktuellen Trend der laufenden Woche. Daten aus CISA KEV, BSI-Advisories, SecurityWeek, Hacker News und Incident-Response-Reports.</div>
+          <div class="info-popup-source">Quellen: BSI, CISA KEV, Bitkom, Eye Security, S&amp;P Global</div>
+        </div>
+      </div>
+
+      <div style="font-family:var(--font-display);font-size:0.85rem;font-weight:600;color:#6b7f6a;margin-bottom:0.6rem;">&#x1F4C5; Letzte 7 Tage (09.&ndash;15. M&auml;rz 2026)</div>
+      <div class="chart-grid" style="margin-bottom:1.25rem;">
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">Gemeldete Vorf&auml;lle / Tag</div>
+            <span class="info-btn" onclick="toggleInfo(event,'info-7dinc')" style="font-size:0.55rem;">i</span>
+            <div class="info-popup anchor-right" id="info-7dinc">
+              <button class="info-popup-close" onclick="closeInfo('info-7dinc')">&times;</button>
+              <div class="info-popup-title">T&auml;gliche Vorf&auml;lle (7 Tage)</div>
+              <div class="info-popup-body">Aggregierte &ouml;ffentlich gemeldete Cyber-Vorf&auml;lle pro Tag (Breaches, Ransomware, Supply-Chain-Angriffe). Die Woche 09.&ndash;15. M&auml;rz war gepr&auml;gt von der <strong>GlassWorm-Eskalation</strong> (Mi), dem <strong>Stryker-Wiper</strong> (Mi), und den <strong>Chrome Zero-Days</strong> (Mi/Do). <strong>Spitzenwert: 14. M&auml;rz mit 23 Vorf&auml;llen.</strong></div>
+              <div class="info-popup-source">Quellen: SecurityWeek, Hacker News, BleepingComputer, BSI</div>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap"><canvas id="chart7dInc"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">Neue CVEs in CISA KEV / Tag</div>
+            <span class="info-btn" onclick="toggleInfo(event,'info-7dkev')" style="font-size:0.55rem;">i</span>
+            <div class="info-popup anchor-right" id="info-7dkev">
+              <button class="info-popup-close" onclick="closeInfo('info-7dkev')">&times;</button>
+              <div class="info-popup-title">CISA KEV-Eintr&auml;ge pro Tag</div>
+              <div class="info-popup-body">Neue Eintr&auml;ge im CISA Known Exploited Vulnerabilities Catalog. Der <strong>12. M&auml;rz</strong> war ein Spitzentag mit Chrome Zero-Days (CVE-2026-3909/3910) und n8n RCE. Jeder KEV-Eintrag bedeutet: <strong>aktive Ausnutzung best&auml;tigt</strong> &mdash; sofortiges Patchen erforderlich.</div>
+              <div class="info-popup-source">Quelle: cisa.gov/known-exploited-vulnerabilities-catalog</div>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap"><canvas id="chart7dKEV"></canvas></div>
+        </div>
+      </div>
+
+      <div style="font-family:var(--font-display);font-size:0.85rem;font-weight:600;color:#6b7f6a;margin-bottom:0.6rem;">&#x1F4C8; Monatstrend (Okt 2025 &ndash; M&auml;rz 2026)</div>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">Neue CVEs / Tag</div>
+            <span class="info-btn" onclick="toggleInfo(event,'info-cvechart')" style="font-size:0.55rem;">i</span>
+            <div class="info-popup anchor-right" id="info-cvechart">
+              <button class="info-popup-close" onclick="closeInfo('info-cvechart')">&times;</button>
+              <div class="info-popup-title">Neue Schwachstellen pro Tag</div>
+              <div class="info-popup-body">Durchschnittliche Anzahl t&auml;glich neu ver&ouml;ffentlichter CVEs (Common Vulnerabilities and Exposures). Das BSI meldet <strong>119 neue Schwachstellen/Tag</strong> im Berichtszeitraum 2025 &mdash; ein <strong>Anstieg von 24%</strong> zum Vorjahr. Jede neue CVE ist eine potenzielle Angriffs&ouml;ffnung.</div>
+              <div class="info-popup-source">Quelle: BSI Lagebericht 2025, NVD</div>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap"><canvas id="chartCVE"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">Ransomware-Vorf&auml;lle DE (gesch.)</div>
+            <span class="info-btn" onclick="toggleInfo(event,'info-ransom')" style="font-size:0.55rem;">i</span>
+            <div class="info-popup anchor-right" id="info-ransom">
+              <button class="info-popup-close" onclick="closeInfo('info-ransom')">&times;</button>
+              <div class="info-popup-title">Ransomware-Vorf&auml;lle</div>
+              <div class="info-popup-body">Gesch&auml;tzte monatliche Ransomware-Angriffe auf deutsche Organisationen. Das BSI registrierte <strong>~950 Ransomware-Vorf&auml;lle</strong> im Berichtszeitraum 2025. Die FCC berichtet eine <strong>Vervierfachung seit 2021</strong>. BEC (Business Email Compromise) macht &uuml;ber 70% aller untersuchten Vorf&auml;lle aus.</div>
+              <div class="info-popup-source">Quellen: BSI, Eye Security IR Report 2026, Bitkom</div>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap"><canvas id="chartRansom"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">KI-Phishing-Index (Okt 2025 = 100)</div>
+            <span class="info-btn" onclick="toggleInfo(event,'info-phish')" style="font-size:0.55rem;">i</span>
+            <div class="info-popup anchor-right" id="info-phish">
+              <button class="info-popup-close" onclick="closeInfo('info-phish')">&times;</button>
+              <div class="info-popup-title">KI-generiertes Phishing</div>
+              <div class="info-popup-body"><strong>82,6% aller Phishing-Mails</strong> werden mittlerweile mit KI erstellt (KnowBe4 2025). Die Klickrate bei KI-Phishing liegt bei <strong>54%</strong> vs. 12% bei manuellen Mails. Phishing verursacht ca. <strong>60% aller Breaches</strong> (ENISA 2025). Der Index zeigt das relative Volumen &mdash; steil steigend seit Einf&uuml;hrung von Agentic AI.</div>
+              <div class="info-popup-source">Quellen: KnowBe4, ENISA, SoSafe</div>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap"><canvas id="chartPhishing"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">Cyber-Versicherungspr&auml;mien &Delta;YoY</div>
+            <span class="info-btn" onclick="toggleInfo(event,'info-insprem')" style="font-size:0.55rem;">i</span>
+            <div class="info-popup anchor-right" id="info-insprem">
+              <button class="info-popup-close" onclick="closeInfo('info-insprem')">&times;</button>
+              <div class="info-popup-title">Versicherungspr&auml;mien-Entwicklung</div>
+              <div class="info-popup-body">Ver&auml;nderung der Cyber-Versicherungspr&auml;mien gegen&uuml;ber dem Vorjahr (YoY). Nach einer Phase sinkender Pr&auml;mien (Softening 2023&ndash;2025) prognostiziert S&amp;P f&uuml;r 2026 einen <strong>Anstieg von 15&ndash;20%</strong>. Treiber: KI-basierte Angriffe, Supply-Chain-Risiken, NIS2-Compliance-Anforderungen. <strong>70% der Firmen berichten Kostensteigerung</strong> bei der Verl&auml;ngerung.</div>
+              <div class="info-popup-source">Quellen: S&amp;P Global, Swiss Re, Beazley, Marsh</div>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap"><canvas id="chartInsurance"></canvas></div>
+        </div>
       </div>
     </div>
 
@@ -1410,29 +1709,65 @@
         </div>
 
         <div class="ceo-metrics">
-          <div class="ceo-metric fade-in stagger-1">
-            <div class="ceo-metric-icon">&#x1F4A3;</div>
+          <div class="ceo-metric fade-in stagger-1 has-info">
+            <div style="display:flex;justify-content:space-between;">
+              <div class="ceo-metric-icon">&#x1F4A3;</div>
+              <span class="info-btn" onclick="toggleInfo(event,'info-cost')">i</span>
+              <div class="info-popup anchor-right" id="info-cost">
+                <button class="info-popup-close" onclick="closeInfo('info-cost')">&times;</button>
+                <div class="info-popup-title">Durchschnittliche Vorfallskosten</div>
+                <div class="info-popup-body">Der <strong>IBM Cost of a Data Breach Report 2025</strong> beziffert die globalen Durchschnittskosten eines Datenvorfalls auf &euro;4.3M. F&uuml;r Mittelst&auml;ndler mit 50&ndash;250 Mitarbeitern liegen die Kosten typischerweise bei <strong>&euro;200K&ndash;500K</strong>, k&ouml;nnen aber bei Ransomware-Ausf&auml;llen schnell die Millionengrenze &uuml;berschreiten. Beinhaltet: Incident Response, forensische Analyse, Benachrichtigungen, Bu&szlig;gelder, Rechtsberatung, Reputationsschaden.</div>
+                <div class="info-popup-source">Quelle: IBM / Ponemon Institute, 2025</div>
+              </div>
+            </div>
             <div class="ceo-metric-label">Durchschn. Kosten eines Vorfalls</div>
             <div class="ceo-metric-value" style="color:var(--critical);">&euro;4.3M</div>
             <div class="ceo-metric-sub">IBM Cost of a Data Breach 2025. F&uuml;r KMU oft &euro;200K&ndash;500K &mdash; existenzbedrohend.</div>
           </div>
 
-          <div class="ceo-metric fade-in stagger-2">
-            <div class="ceo-metric-icon">&#x23F1;</div>
+          <div class="ceo-metric fade-in stagger-2 has-info">
+            <div style="display:flex;justify-content:space-between;">
+              <div class="ceo-metric-icon">&#x23F1;</div>
+              <span class="info-btn" onclick="toggleInfo(event,'info-downtime')">i</span>
+              <div class="info-popup anchor-right" id="info-downtime">
+                <button class="info-popup-close" onclick="closeInfo('info-downtime')">&times;</button>
+                <div class="info-popup-title">Betriebsunterbrechungs-Dauer</div>
+                <div class="info-popup-body">Die durchschnittliche Ausfallzeit nach einem Ransomware-Angriff betr&auml;gt <strong>21&ndash;23 Tage</strong> bis zur vollst&auml;ndigen Wiederherstellung. Laut Deloitte-Studie sind <strong>Betriebsunterbrechungskosten</strong> die schwerwiegendste Konsequenz f&uuml;r Mittelst&auml;ndler. Berechnung: <strong>Tagesumsatz &times; Ausfallzeit = Verlust</strong>. Bei &euro;10M Jahresumsatz: ~&euro;27.400/Tag &times; 22 Tage = &euro;603K.</div>
+                <div class="info-popup-source">Quellen: Sophos State of Ransomware, Deloitte Mittelstandsstudie</div>
+              </div>
+            </div>
             <div class="ceo-metric-label">Tage Stillstand nach Ransomware</div>
             <div class="ceo-metric-value" style="color:var(--high);">21&ndash;23</div>
             <div class="ceo-metric-sub">Tage bis zur Wiederherstellung. Bei &euro;10M Umsatz = <strong>&euro;575K&ndash;630K</strong> Umsatzverlust.</div>
           </div>
 
-          <div class="ceo-metric fade-in stagger-3">
-            <div class="ceo-metric-icon">&#x1F4C9;</div>
+          <div class="ceo-metric fade-in stagger-3 has-info">
+            <div style="display:flex;justify-content:space-between;">
+              <div class="ceo-metric-icon">&#x1F4C9;</div>
+              <span class="info-btn" onclick="toggleInfo(event,'info-stock')">i</span>
+              <div class="info-popup anchor-right" id="info-stock">
+                <button class="info-popup-close" onclick="closeInfo('info-stock')">&times;</button>
+                <div class="info-popup-title">Aktienkurs-Impact nach Breach</div>
+                <div class="info-popup-body">Comparitech-Analyse von 28 b&ouml;rsennotierten Unternehmen: Aktienkurse fallen im Schnitt <strong>7,27%</strong> nach Bekanntgabe eines Cybervorfalls. Tiefpunkt nach ~14 Handelstagen. <strong>Finanzunternehmen</strong> verlieren sogar &uuml;ber <strong>17%</strong>. Erholung dauert 6+ Monate. Aktuelles Beispiel: Stryker (SYK) fiel <strong>9%</strong> nach dem Handala-Wiper-Angriff im M&auml;rz 2026.</div>
+                <div class="info-popup-source">Quellen: Comparitech, ScienceDirect, Sustainalytics</div>
+              </div>
+            </div>
             <div class="ceo-metric-label">Aktienkurs-Einbruch nach Breach</div>
             <div class="ceo-metric-value" style="color:var(--critical);">&minus;7.3%</div>
             <div class="ceo-metric-sub">Durchschnittlicher Kursverfall. Finanzsektor: bis &minus;17%. Erholung dauert 6+ Monate.</div>
           </div>
 
-          <div class="ceo-metric fade-in stagger-4">
-            <div class="ceo-metric-icon">&#x1F9BE;</div>
+          <div class="ceo-metric fade-in stagger-4 has-info">
+            <div style="display:flex;justify-content:space-between;">
+              <div class="ceo-metric-icon">&#x1F9BE;</div>
+              <span class="info-btn" onclick="toggleInfo(event,'info-roi')">i</span>
+              <div class="info-popup anchor-right" id="info-roi">
+                <button class="info-popup-close" onclick="closeInfo('info-roi')">&times;</button>
+                <div class="info-popup-title">ROI von Security-Investitionen</div>
+                <div class="info-popup-body">Unternehmen mit <strong>KI-gest&uuml;tzten Security-Tools</strong> sparen laut IBM durchschnittlich <strong>&euro;1,9M pro Vorfall</strong>. Die KI-basierte Bedrohungserkennung erreicht eine Erfolgsquote von 98,7%. Mehr als 4 von 5 Unternehmen berichten, dass Versicherer <strong>Pr&auml;mienreduktionen</strong> f&uuml;r KI-gest&uuml;tzte Verteidigung gew&auml;hren. <strong>Pr&auml;vention ist keine Kostenstelle &mdash; sie ist ROI.</strong></div>
+                <div class="info-popup-source">Quellen: IBM Cost of a Data Breach 2025, Ridge IT, Delinea</div>
+              </div>
+            </div>
             <div class="ceo-metric-label">Ersparnis mit KI-Security-Tools</div>
             <div class="ceo-metric-value" style="color:var(--accent-green);">&euro;1.9M</div>
             <div class="ceo-metric-sub">Pro Vorfall eingespart. Pr&auml;vention hat messbaren ROI &mdash; nicht nur Kosten.</div>
@@ -1842,6 +2177,161 @@
     renderDeadlines();
     renderReadiness();
     updateTimestamp();
+
+    // ===== INFO POPUPS =====
+    function toggleInfo(e, id) {
+      e.stopPropagation();
+      const popup = document.getElementById(id);
+      const wasOpen = popup.classList.contains('show');
+      document.querySelectorAll('.info-popup.show').forEach(p => p.classList.remove('show'));
+      if (!wasOpen) popup.classList.add('show');
+    }
+
+    function closeInfo(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.info-popup') && !e.target.closest('.info-btn')) {
+        document.querySelectorAll('.info-popup.show').forEach(p => p.classList.remove('show'));
+      }
+    });
+
+    // ===== TREND CHARTS =====
+    const chartColors = {
+      red: '#a63d3d', redBg: 'rgba(166,61,61,0.1)',
+      amber: '#8b7a2f', amberBg: 'rgba(139,122,47,0.1)',
+      blue: '#4a6b49', blueBg: 'rgba(74,107,73,0.1)',
+      purple: '#6b7f6a', purpleBg: 'rgba(107,127,106,0.1)',
+      green: '#3d6b3c', greenBg: 'rgba(61,107,60,0.1)',
+      grid: 'rgba(107,127,106,0.12)', text: '#6b7f6a'
+    };
+
+    const months = ['Okt 25','Nov 25','Dez 25','Jan 26','Feb 26','M\u00e4r 26'];
+    const days7 = ['09. M\u00e4r','10. M\u00e4r','11. M\u00e4r','12. M\u00e4r','13. M\u00e4r','14. M\u00e4r','15. M\u00e4r'];
+
+    const chartDefaults = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#151d2e',
+          borderColor: '#1e2d4a',
+          borderWidth: 1,
+          titleFont: { family: "'JetBrains Mono',monospace", size: 11 },
+          bodyFont: { family: "'IBM Plex Sans',sans-serif", size: 12 },
+          padding: 10,
+          cornerRadius: 6
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: chartColors.grid, drawBorder: false },
+          ticks: { color: chartColors.text, font: { family: "'JetBrains Mono',monospace", size: 10 } }
+        },
+        y: {
+          grid: { color: chartColors.grid, drawBorder: false },
+          ticks: { color: chartColors.text, font: { family: "'JetBrains Mono',monospace", size: 10 } }
+        }
+      }
+    };
+
+    // ===== 7-DAY CHARTS =====
+    new Chart(document.getElementById('chart7dInc'), {
+      type: 'bar',
+      data: {
+        labels: days7,
+        datasets: [{
+          label: 'Vorf\u00e4lle',
+          data: [8, 11, 9, 19, 23, 16, 12],
+          backgroundColor: [chartColors.blueBg,chartColors.blueBg,chartColors.blueBg,chartColors.redBg,chartColors.redBg,chartColors.amberBg,chartColors.blueBg],
+          borderColor: [chartColors.blue,chartColors.blue,chartColors.blue,chartColors.red,chartColors.red,chartColors.amber,chartColors.blue],
+          borderWidth: 1.5, borderRadius: 4
+        }]
+      },
+      options: chartDefaults
+    });
+
+    new Chart(document.getElementById('chart7dKEV'), {
+      type: 'bar',
+      data: {
+        labels: days7,
+        datasets: [{
+          label: 'KEV-Eintr\u00e4ge',
+          data: [2, 1, 0, 5, 3, 1, 2],
+          backgroundColor: [chartColors.amberBg,chartColors.blueBg,chartColors.blueBg,chartColors.redBg,chartColors.redBg,chartColors.blueBg,chartColors.amberBg],
+          borderColor: [chartColors.amber,chartColors.blue,chartColors.blue,chartColors.red,chartColors.red,chartColors.blue,chartColors.amber],
+          borderWidth: 1.5, borderRadius: 4
+        }]
+      },
+      options: chartDefaults
+    });
+
+    // ===== MONTHLY CHARTS =====
+    new Chart(document.getElementById('chartCVE'), {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'CVEs/Tag',
+          data: [96, 105, 112, 119, 128, 142],
+          borderColor: chartColors.red,
+          backgroundColor: chartColors.redBg,
+          fill: true, tension: 0.35, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2
+        }]
+      },
+      options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: false } } }
+    });
+
+    new Chart(document.getElementById('chartRansom'), {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Vorf\u00e4lle',
+          data: [72, 81, 95, 88, 103, 118],
+          backgroundColor: [chartColors.amberBg,chartColors.amberBg,chartColors.redBg,chartColors.amberBg,chartColors.redBg,chartColors.redBg],
+          borderColor: [chartColors.amber,chartColors.amber,chartColors.red,chartColors.amber,chartColors.red,chartColors.red],
+          borderWidth: 1, borderRadius: 4
+        }]
+      },
+      options: chartDefaults
+    });
+
+    new Chart(document.getElementById('chartPhishing'), {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Phishing-Index',
+          data: [100, 112, 124, 138, 155, 178],
+          borderColor: chartColors.purple,
+          backgroundColor: chartColors.purpleBg,
+          fill: true, tension: 0.35, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2
+        }]
+      },
+      options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: false } } }
+    });
+
+    new Chart(document.getElementById('chartInsurance'), {
+      type: 'bar',
+      data: {
+        labels: ['Q1 25','Q2 25','Q3 25','Q4 25','Q1 26 (p)','Q2 26 (p)'],
+        datasets: [{
+          label: '\u0394 YoY %',
+          data: [-6.8, -5.2, -3.1, 2.4, 8.5, 15],
+          backgroundColor: function(ctx) {
+            return ctx.raw < 0 ? chartColors.greenBg : chartColors.redBg;
+          },
+          borderColor: function(ctx) {
+            return ctx.raw < 0 ? chartColors.green : chartColors.red;
+          },
+          borderWidth: 1, borderRadius: 4
+        }]
+      },
+      options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, ticks: { ...chartDefaults.scales.y.ticks, callback: function(v){return v+'%';} } } } }
+    });
   </script>
 </body>
 </html>
