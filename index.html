@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber-Financial Intelligence Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111827;
+      --bg-card: #151d2e;
+      --bg-card-hover: #1a2540;
+      --border: #1e2d4a;
+      --border-active: #2563eb;
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-purple: #8b5cf6;
+      --critical: #dc2626;
+      --critical-bg: rgba(220, 38, 38, 0.08);
+      --critical-border: rgba(220, 38, 38, 0.25);
+      --high: #f59e0b;
+      --high-bg: rgba(245, 158, 11, 0.08);
+      --high-border: rgba(245, 158, 11, 0.25);
+      --medium: #3b82f6;
+      --medium-bg: rgba(59, 130, 246, 0.08);
+      --medium-border: rgba(59, 130, 246, 0.25);
+      --low: #10b981;
+      --low-bg: rgba(16, 185, 129, 0.08);
+      --glow-blue: 0 0 20px rgba(59, 130, 246, 0.15);
+      --glow-red: 0 0 20px rgba(220, 38, 38, 0.15);
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ===== SCANLINE OVERLAY ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(10, 14, 23, 0.95) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      font-family: var(--font-mono);
+      box-shadow: var(--glow-blue);
+    }
+
+    .header-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-live {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--accent-green);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    }
+
+    .timestamp {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ===== MAIN LAYOUT ===== */
+    .main {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 4rem;
+    }
+
+    /* ===== ALERT BANNER ===== */
+    .alert-banner {
+      background: var(--critical-bg);
+      border: 1px solid var(--critical-border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      animation: alertFadeIn 0.6s ease-out;
+    }
+
+    @keyframes alertFadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert-icon {
+      font-size: 1.1rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    .alert-content h3 {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--critical);
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .alert-content p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ===== STATS ROW ===== */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+    }
+
+    .stat-card.critical::before { background: var(--critical); }
+    .stat-card.high::before { background: var(--high); }
+    .stat-card.medium::before { background: var(--accent-blue); }
+    .stat-card.low::before { background: var(--accent-green); }
+    .stat-card.info::before { background: var(--accent-purple); }
+
+    .stat-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-active);
+      transform: translateY(-2px);
+      box-shadow: var(--glow-blue);
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-value.critical { color: var(--critical); }
+    .stat-value.high { color: var(--high); }
+    .stat-value.blue { color: var(--accent-blue); }
+    .stat-value.green { color: var(--accent-green); }
+    .stat-value.purple { color: var(--accent-purple); }
+
+    .stat-change {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      margin-top: 0.4rem;
+    }
+
+    .stat-change.up { color: var(--critical); }
+    .stat-change.down { color: var(--accent-green); }
+
+    /* ===== SECTION ===== */
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-title .num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent-blue);
+      background: rgba(59, 130, 246, 0.1);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .section-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+    }
+
+    .badge-critical {
+      background: var(--critical-bg);
+      color: var(--critical);
+      border: 1px solid var(--critical-border);
+    }
+
+    .badge-new {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--high);
+      border: 1px solid var(--high-border);
+    }
+
+    /* ===== TABLE ===== */
+    .table-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    thead th {
+      background: rgba(30, 45, 74, 0.5);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(30, 45, 74, 0.3);
+      transition: background 0.15s ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(37, 99, 235, 0.04);
+    }
+
+    tbody td {
+      padding: 0.7rem 1rem;
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+
+    tbody td:first-child {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .severity {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .severity.crit { background: var(--critical-bg); color: var(--critical); border: 1px solid var(--critical-border); }
+    .severity.high { background: var(--high-bg); color: var(--high); border: 1px solid var(--high-border); }
+    .severity.med { background: var(--medium-bg); color: var(--medium); border: 1px solid var(--medium-border); }
+
+    .urgency-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .urgency-fill {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--accent-green);
+      transition: width 0.4s ease;
+    }
+
+    .urgency-fill.u10 { width: 100%; background: var(--critical); }
+    .urgency-fill.u9 { width: 90%; background: var(--critical); }
+    .urgency-fill.u8 { width: 80%; background: var(--high); }
+    .urgency-fill.u7 { width: 70%; background: var(--high); }
+    .urgency-fill.u6 { width: 60%; background: var(--accent-blue); }
+
+    .urgency-num {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      min-width: 2ch;
+    }
+
+    /* ===== FINANCIAL CARDS ===== */
+    .fin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .fin-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      transition: all 0.2s ease;
+    }
+
+    .fin-card:hover {
+      border-color: var(--border-active);
+      box-shadow: var(--glow-blue);
+    }
+
+    .fin-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .fin-card-title {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .fin-elm {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--critical);
+    }
+
+    .fin-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+      border-top: 1px solid rgba(30, 45, 74, 0.3);
+    }
+
+    .fin-row-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .fin-row-value {
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .systemic-high { color: var(--critical); }
+    .systemic-med { color: var(--high); }
+
+    /* ===== FAIR MODEL ===== */
+    .fair-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .fair-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .fair-formula {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.08);
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      border: 1px solid rgba(6, 182, 212, 0.15);
+      margin: 0.75rem 0 1rem;
+      display: inline-block;
+    }
+
+    /* ===== ACTIONABLE INSIGHTS ===== */
+    .action-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .action-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: all 0.2s ease;
+    }
+
+    .action-item:hover {
+      border-color: var(--border-active);
+      background: var(--bg-card-hover);
+    }
+
+    .action-item.critical-action {
+      border-left: 3px solid var(--critical);
+    }
+
+    .action-item.warn-action {
+      border-left: 3px solid var(--high);
+    }
+
+    .action-item.info-action {
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    .action-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .action-body h4 {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .action-body p {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .action-tag {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      margin-top: 0.4rem;
+      display: inline-block;
+    }
+
+    .tag-critical { background: var(--critical-bg); color: var(--critical); }
+    .tag-invest { background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); }
+
+    /* ===== INSURANCE SECTION ===== */
+    .insurance-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .ins-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+
+    .ins-card h4 {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .ins-metric {
+      font-family: var(--font-mono);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .ins-metric.up { color: var(--critical); }
+    .ins-metric.neutral { color: var(--accent-blue); }
+
+    .ins-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .footer-right {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .footer-link {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent-blue);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .footer-link:hover { opacity: 1; }
+
+    /* ===== NAV TABS ===== */
+    .nav-tabs {
+      display: flex;
+      gap: 0.25rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.25rem;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+    }
+
+    .nav-tab {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-muted);
+      border: none;
+      background: none;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-tab:hover { color: var(--text-primary); background: rgba(59, 130, 246, 0.05); }
+    .nav-tab.active { color: var(--text-primary); background: var(--bg-card); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ===== CHANGELOG ===== */
+    .changelog {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+
+    .changelog-entry {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(30, 45, 74, 0.3);
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .changelog-entry:last-child { border-bottom: none; }
+
+    .changelog-date {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      min-width: 10ch;
+      flex-shrink: 0;
+    }
+
+    .changelog-text {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* ===== CEO TAB HIGHLIGHT ===== */
+    .nav-tab.ceo-tab {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.1));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: var(--accent-purple);
+    }
+    .nav-tab.ceo-tab:hover, .nav-tab.ceo-tab.active {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(59, 130, 246, 0.15));
+      color: #fff;
+      border-color: var(--accent-purple);
+    }
+
+    /* ===== TRAFFIC LIGHT / AMPEL ===== */
+    .ampel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .ampel-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .ampel-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .ampel-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .ampel-card.ampel-rot::after { background: var(--critical); }
+    .ampel-card.ampel-gelb::after { background: var(--high); }
+    .ampel-card.ampel-gruen::after { background: var(--accent-green); }
+
+    .ampel-light {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      margin: 0 auto 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .ampel-rot .ampel-light {
+      background: radial-gradient(circle, #ef4444 0%, #7f1d1d 100%);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.5), 0 0 40px rgba(239, 68, 68, 0.2);
+      animation: glowRed 2s ease-in-out infinite;
+    }
+
+    .ampel-gelb .ampel-light {
+      background: radial-gradient(circle, #f59e0b 0%, #78350f 100%);
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+    }
+
+    .ampel-gruen .ampel-light {
+      background: radial-gradient(circle, #10b981 0%, #064e3b 100%);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    }
+
+    @keyframes glowRed {
+      0%, 100% { box-shadow: 0 0 20px rgba(239,68,68,0.5), 0 0 40px rgba(239,68,68,0.2); }
+      50% { box-shadow: 0 0 30px rgba(239,68,68,0.7), 0 0 60px rgba(239,68,68,0.3); }
+    }
+
+    .ampel-title {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .ampel-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .ampel-detail {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(30,45,74,0.3);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    /* ===== CEO METRIC CARDS ===== */
+    .ceo-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .ceo-metric {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .ceo-metric:hover {
+      border-color: var(--border-active);
+      transform: translateY(-2px);
+      box-shadow: var(--glow-blue);
+    }
+
+    .ceo-metric-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .ceo-metric-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .ceo-metric-value {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .ceo-metric-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+      line-height: 1.4;
+    }
+
+    /* ===== GAUGE / READINESS BAR ===== */
+    .readiness-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .readiness-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .readiness-items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .readiness-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .readiness-label {
+      font-size: 0.78rem;
+      width: 280px;
+      flex-shrink: 0;
+      color: var(--text-secondary);
+    }
+
+    .readiness-bar-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(30,45,74,0.5);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .readiness-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 1s ease-out;
+    }
+
+    .readiness-bar-fill.fill-red { background: linear-gradient(90deg, #dc2626, #ef4444); }
+    .readiness-bar-fill.fill-amber { background: linear-gradient(90deg, #d97706, #f59e0b); }
+    .readiness-bar-fill.fill-green { background: linear-gradient(90deg, #059669, #10b981); }
+
+    .readiness-pct {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      width: 50px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ===== DEADLINE COUNTDOWN ===== */
+    .deadline-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .deadline-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .deadline-days {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .deadline-days.overdue { color: var(--critical); }
+    .deadline-days.soon { color: var(--high); }
+    .deadline-days.ok { color: var(--accent-blue); }
+
+    .deadline-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    .deadline-desc {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(59, 130, 246, 0.08));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 14px;
+      padding: 2rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .cta-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      background: rgba(139,92,246,0.15);
+      color: var(--accent-purple);
+      border: 1px solid rgba(139,92,246,0.3);
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #e2e8f0, #c4b5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cta-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 1.25rem;
+      line-height: 1.6;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 2rem;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(139,92,246,0.3);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(139,92,246,0.45);
+    }
+
+    .cta-features {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .cta-feature {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .cta-feature .check {
+      color: var(--accent-green);
+      font-weight: 700;
+    }
+
+    /* ===== RESPONSIVE additions ===== */
+    @media (max-width: 1200px) {
+      .ampel-grid { grid-template-columns: repeat(2, 1fr); }
+      .ceo-metrics { grid-template-columns: repeat(2, 1fr); }
+      .deadline-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .ampel-grid { grid-template-columns: 1fr; }
+      .ceo-metrics { grid-template-columns: 1fr; }
+      .deadline-grid { grid-template-columns: 1fr; }
+      .readiness-row { flex-direction: column; align-items: flex-start; }
+      .readiness-label { width: 100%; }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1200px) {
+      .stats-row { grid-template-columns: repeat(3, 1fr); }
+      .fin-grid { grid-template-columns: 1fr; }
+      .insurance-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .header-inner { flex-direction: column; gap: 0.75rem; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .insurance-grid { grid-template-columns: 1fr; }
+      .main { padding: 1rem; }
+      .fin-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== ANIMATIONS ===== */
+    .fade-in {
+      animation: fadeIn 0.5s ease-out both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stagger-1 { animation-delay: 0.05s; }
+    .stagger-2 { animation-delay: 0.1s; }
+    .stagger-3 { animation-delay: 0.15s; }
+    .stagger-4 { animation-delay: 0.2s; }
+    .stagger-5 { animation-delay: 0.25s; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="logo-icon">C&#xB7;F</div>
+        <div>
+          <div class="header-title">Cyber-Financial Intelligence Dashboard</div>
+          <div class="header-subtitle">Dynamic Real-Time Intelligence &bull; FAIR Framework v4</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="status-badge status-live">
+          <div class="status-dot"></div>
+          Living Document
+        </div>
+        <div class="timestamp" id="lastUpdate">Letztes Update: wird geladen...</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ALERT BANNER -->
+    <div class="alert-banner fade-in">
+      <div class="alert-icon">&#x26A0;&#xFE0F;</div>
+      <div class="alert-content">
+        <h3>Kritische Bedrohungslage &mdash; M&auml;rz 2026</h3>
+        <p>GlassWorm Supply-Chain-Wurm breitet sich &uuml;ber 150+ GitHub Repos, 72 Open VSX Extensions und npm aus. Stryker Wiper-Angriff (Handala/Iran) hat 200.000+ Systeme zerst&ouml;rt. CISA ED 26-03 f&uuml;r Cisco SD-WAN (CVSS 10.0) mit sofortiger Patch-Pflicht.</p>
+      </div>
+    </div>
+
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat-card critical fade-in stagger-1">
+        <div class="stat-label">Kritische Bedrohungen</div>
+        <div class="stat-value critical" id="statCritical">3</div>
+        <div class="stat-change up">&#x25B2; +2 vs. Vorwoche</div>
+      </div>
+      <div class="stat-card high fade-in stagger-2">
+        <div class="stat-label">Aktiv Exploited CVEs</div>
+        <div class="stat-value high" id="statCVE">7</div>
+        <div class="stat-change up">&#x25B2; +3 vs. Vorwoche</div>
+      </div>
+      <div class="stat-card medium fade-in stagger-3">
+        <div class="stat-label">CISA Emergency Directives</div>
+        <div class="stat-value blue">3</div>
+        <div class="stat-change up">ED 26-01, 26-03, 25-02</div>
+      </div>
+      <div class="stat-card low fade-in stagger-4">
+        <div class="stat-label">Gesch. Gesamtrisiko p.a.</div>
+        <div class="stat-value green">&euro;39&ndash;224M</div>
+        <div class="stat-change">FAIR-aggregiert</div>
+      </div>
+      <div class="stat-card info fade-in stagger-5">
+        <div class="stat-label">Cyber-Vers. Pr&auml;mien 2026</div>
+        <div class="stat-value purple">+15%</div>
+        <div class="stat-change">S&amp;P / Forrester Prognose</div>
+      </div>
+    </div>
+
+    <!-- NAV TABS -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showTab('threats')">01 Threat Landscape</button>
+      <button class="nav-tab" onclick="showTab('vulns')">02 Vulnerabilities</button>
+      <button class="nav-tab" onclick="showTab('finance')">03 Financial Impact</button>
+      <button class="nav-tab" onclick="showTab('actions')">04 Actionable Insights</button>
+      <button class="nav-tab" onclick="showTab('changelog')">05 Changelog</button>
+      <button class="nav-tab ceo-tab" onclick="showTab('ceo')">&#x1F3AF; CEO Risk Scorecard</button>
+    </div>
+
+    <!-- TAB 1: THREATS -->
+    <div class="tab-content active" id="tab-threats">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><span class="num">01</span> Threat Landscape Summary</div>
+          <span class="section-badge badge-critical">3 Kritisch</span>
+        </div>
+        <div class="table-wrapper">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Bedrohung</th>
+                  <th>Attack Vector</th>
+                  <th>Threat Actor / Motivation</th>
+                  <th>Velocity &amp; Spread</th>
+                  <th>Severity</th>
+                </tr>
+              </thead>
+              <tbody id="threatTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: VULNS -->
+    <div class="tab-content" id="tab-vulns">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><span class="num">02</span> Vulnerability &amp; Finding Report</div>
+          <span class="section-badge badge-new">7 Active</span>
+        </div>
+        <div class="table-wrapper">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>CVE / Bezeichnung</th>
+                  <th>Betroffene Sektoren</th>
+                  <th>CVSS Score</th>
+                  <th>Exploitability</th>
+                  <th>Mitigation Urgency</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="vulnTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: FINANCE -->
+    <div class="tab-content" id="tab-finance">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><span class="num">03</span> Financial Impact Analysis</div>
+        </div>
+
+        <div class="fin-grid" id="finGrid">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- FAIR Model -->
+        <div class="fair-section" style="margin-top: 1.5rem;">
+          <div class="fair-title">FAIR-Risikomodell (Factor Analysis of Information Risk)</div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Annualisiertes Risiko berechnet als:</p>
+          <div class="fair-formula">R = P &times; (L&#x2081; + L&#x2082;) &nbsp;&nbsp;|&nbsp;&nbsp; P = Eintrittswahrscheinlichkeit &nbsp;|&nbsp; L&#x2081; = Prim&auml;rverlust &nbsp;|&nbsp; L&#x2082; = Sekund&auml;rverlust</div>
+          <div class="table-wrapper" style="margin-top: 1rem;">
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Szenario</th>
+                    <th>P (p.a.)</th>
+                    <th>L&#x2081; Prim&auml;r</th>
+                    <th>L&#x2082; Sekund&auml;r</th>
+                    <th>R annualisiert</th>
+                    <th>Konfidenz</th>
+                  </tr>
+                </thead>
+                <tbody id="fairTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Insurance -->
+        <div style="margin-top: 1.5rem;">
+          <div class="section-header">
+            <div class="section-title">Cyber-Versicherungs-Implikationen</div>
+          </div>
+          <div class="insurance-grid">
+            <div class="ins-card">
+              <h4>Globale Pr&auml;mien 2026</h4>
+              <div class="ins-metric up">$16.4&ndash;23B</div>
+              <div class="ins-desc">Swiss Re / S&amp;P Global Ratings Prognose. +15&ndash;20% YoY Wachstum durch KI-bedingte Bedrohungserweiterung.</div>
+            </div>
+            <div class="ins-card">
+              <h4>Kostensteigerung bei Renewal</h4>
+              <div class="ins-metric up">70%</div>
+              <div class="ins-desc">der Sicherheitsverantwortlichen berichten Pr&auml;mienanstieg. Identity-Security-Controls werden zur Pflicht f&uuml;r Deckung.</div>
+            </div>
+            <div class="ins-card">
+              <h4>Neue Exclusions 2026</h4>
+              <div class="ins-metric neutral">3 Typen</div>
+              <div class="ins-desc">Geopolitische Wiper, Supply-Chain-Sublimits, KI-Governance-Anforderungen. Wiper-Angriffe zunehmend von Deckung ausgeschlossen.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: ACTIONS -->
+    <div class="tab-content" id="tab-actions">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><span class="num">04</span> Actionable Insights</div>
+        </div>
+        <div class="action-list" id="actionList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: CHANGELOG -->
+    <div class="tab-content" id="tab-changelog">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><span class="num">05</span> Living Document &mdash; Aktualisierungsprotokoll</div>
+        </div>
+        <div class="changelog" id="changelogEntries">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: CEO RISK SCORECARD -->
+    <div class="tab-content" id="tab-ceo">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><span class="num">06</span> CEO Risk Scorecard &mdash; Mittelstand &amp; Startups</div>
+          <span class="section-badge badge-critical">Handlungsbedarf</span>
+        </div>
+
+        <!-- AMPEL: PERSONAL LIABILITY -->
+        <div style="margin-bottom:0.5rem;">
+          <div class="section-title" style="font-size:0.9rem; margin-bottom:0.75rem;">&#x1F6A8; Pers&ouml;nliche Haftung &mdash; Betrifft Sie direkt</div>
+        </div>
+
+        <div class="ampel-grid">
+          <div class="ampel-card ampel-rot fade-in stagger-1">
+            <div class="ampel-light">&#x26A0;</div>
+            <div class="ampel-title" style="color:var(--critical);">NIS2 Gesch&auml;ftsf&uuml;hrer&shy;haftung</div>
+            <div class="ampel-subtitle">Status: Aktiv seit 06.12.2025</div>
+            <div class="ampel-detail">
+              <strong style="color:var(--critical);">Sie haften mit Ihrem Privatverm&ouml;gen.</strong> Seit M&auml;rz 2026 gilt die volle NIS2-Durchsetzung. 30.000 Unternehmen in DE betroffen. Bu&szlig;gelder bis <strong>10 Mio. &euro;</strong> oder <strong>2% des globalen Umsatzes</strong>. Ohne dokumentierte Ma&szlig;nahmen = Pflichtversto&szlig;.
+            </div>
+          </div>
+
+          <div class="ampel-card ampel-rot fade-in stagger-2">
+            <div class="ampel-light">&#x1F6E1;</div>
+            <div class="ampel-title" style="color:var(--critical);">D&amp;O-Versicherungs&shy;l&uuml;cke</div>
+            <div class="ampel-subtitle">Deckung gef&auml;hrdet</div>
+            <div class="ampel-detail">
+              Bei NIS2-Verst&ouml;&szlig;en geht die D&amp;O-Versicherung von <strong>Fahrl&auml;ssigkeit</strong> aus und verweigert die Schadensregulierung. Kein ISMS = kein Versicherungsschutz f&uuml;r den Gesch&auml;ftsf&uuml;hrer. Pr&uuml;fen Sie <em>heute</em> Ihre Police.
+            </div>
+          </div>
+
+          <div class="ampel-card ampel-gelb fade-in stagger-3">
+            <div class="ampel-light">&#x1F4CB;</div>
+            <div class="ampel-title" style="color:var(--high);">Pflicht-Schulung GF</div>
+            <div class="ampel-subtitle">Alle 3 Jahre, nicht delegierbar</div>
+            <div class="ampel-detail">
+              NIS2 verpflichtet Gesch&auml;ftsf&uuml;hrer zur <strong>pers&ouml;nlichen</strong> Teilnahme an Cybersecurity-Schulungen &mdash; mindestens alle 3 Jahre. Die Schulungspflicht ist <strong>nicht delegierbar</strong>. Fehlender Nachweis = Haftungsrisiko.
+            </div>
+          </div>
+        </div>
+
+        <!-- COUNTDOWN DEADLINES -->
+        <div style="margin-bottom:0.5rem;">
+          <div class="section-title" style="font-size:0.9rem; margin-bottom:0.75rem;">&#x23F0; Compliance-Deadlines &mdash; Die Uhr tickt</div>
+        </div>
+
+        <div class="deadline-grid" id="deadlineGrid">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- CEO BUSINESS RISK METRICS -->
+        <div style="margin-bottom:0.5rem;">
+          <div class="section-title" style="font-size:0.9rem; margin-bottom:0.75rem;">&#x1F4B8; Gesch&auml;ftsrisiko in Euro &mdash; Was ein Angriff kostet</div>
+        </div>
+
+        <div class="ceo-metrics">
+          <div class="ceo-metric fade-in stagger-1">
+            <div class="ceo-metric-icon">&#x1F4A3;</div>
+            <div class="ceo-metric-label">Durchschn. Kosten eines Vorfalls</div>
+            <div class="ceo-metric-value" style="color:var(--critical);">&euro;4.3M</div>
+            <div class="ceo-metric-sub">IBM Cost of a Data Breach 2025. F&uuml;r KMU oft &euro;200K&ndash;500K &mdash; existenzbedrohend.</div>
+          </div>
+
+          <div class="ceo-metric fade-in stagger-2">
+            <div class="ceo-metric-icon">&#x23F1;</div>
+            <div class="ceo-metric-label">Tage Stillstand nach Ransomware</div>
+            <div class="ceo-metric-value" style="color:var(--high);">21&ndash;23</div>
+            <div class="ceo-metric-sub">Tage bis zur Wiederherstellung. Bei &euro;10M Umsatz = <strong>&euro;575K&ndash;630K</strong> Umsatzverlust.</div>
+          </div>
+
+          <div class="ceo-metric fade-in stagger-3">
+            <div class="ceo-metric-icon">&#x1F4C9;</div>
+            <div class="ceo-metric-label">Aktienkurs-Einbruch nach Breach</div>
+            <div class="ceo-metric-value" style="color:var(--critical);">&minus;7.3%</div>
+            <div class="ceo-metric-sub">Durchschnittlicher Kursverfall. Finanzsektor: bis &minus;17%. Erholung dauert 6+ Monate.</div>
+          </div>
+
+          <div class="ceo-metric fade-in stagger-4">
+            <div class="ceo-metric-icon">&#x1F9BE;</div>
+            <div class="ceo-metric-label">Ersparnis mit KI-Security-Tools</div>
+            <div class="ceo-metric-value" style="color:var(--accent-green);">&euro;1.9M</div>
+            <div class="ceo-metric-sub">Pro Vorfall eingespart. Pr&auml;vention hat messbaren ROI &mdash; nicht nur Kosten.</div>
+          </div>
+        </div>
+
+        <div class="ceo-metrics">
+          <div class="ceo-metric">
+            <div class="ceo-metric-icon">&#x1F3E2;</div>
+            <div class="ceo-metric-label">Betroffene dt. Unternehmen (3 Jahre)</div>
+            <div class="ceo-metric-value" style="color:var(--high);">89%</div>
+            <div class="ceo-metric-sub">PwC Digital Trust Insights 2026. Deutschland liegt &uuml;ber dem globalen Schnitt (82%).</div>
+          </div>
+
+          <div class="ceo-metric">
+            <div class="ceo-metric-icon">&#x1F4B5;</div>
+            <div class="ceo-metric-label">Gesamtschaden DE 2025</div>
+            <div class="ceo-metric-value" style="color:var(--critical);">&euro;289Mrd</div>
+            <div class="ceo-metric-sub">Bitkom Wirtschaftsschutz-Studie. +8% vs. Vorjahr. Spionage, Sabotage, Datendiebstahl.</div>
+          </div>
+
+          <div class="ceo-metric">
+            <div class="ceo-metric-icon">&#x1F4E7;</div>
+            <div class="ceo-metric-label">KI-generierte Phishing-Mails</div>
+            <div class="ceo-metric-value" style="color:var(--high);">82.6%</div>
+            <div class="ceo-metric-sub">Aller Phishing-Mails werden mit KI erstellt. Klickrate: 54% (vs. 12% manuell).</div>
+          </div>
+
+          <div class="ceo-metric">
+            <div class="ceo-metric-icon">&#x1F6E1;</div>
+            <div class="ceo-metric-label">Cyber-Versicherbarkeits-Trend</div>
+            <div class="ceo-metric-value" style="color:var(--high);">+15%</div>
+            <div class="ceo-metric-sub">Pr&auml;mienanstieg 2026. 70% berichten Kostensteigerung. Ohne MFA &amp; ISMS = Deckung verweigert.</div>
+          </div>
+        </div>
+
+        <!-- NIS2 READINESS SCORE -->
+        <div style="margin-bottom:0.5rem;">
+          <div class="section-title" style="font-size:0.9rem; margin-bottom:0.75rem;">&#x1F4CA; NIS2-Readiness-Check &mdash; Wo steht Ihr Unternehmen?</div>
+        </div>
+
+        <div class="readiness-section">
+          <div class="readiness-title">Durchschnittlicher deutscher Mittelstand vs. NIS2-Anforderungen</div>
+          <div class="readiness-items" id="readinessItems">
+            <!-- Populated by JS -->
+          </div>
+          <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(30,45,74,0.3);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Gesamt-Reifegrad Mittelstand</span>
+                <div style="font-family:var(--font-display); font-size:1.4rem; font-weight:700; color:var(--high);">Stufe 2 von 5</div>
+                <div style="font-size:0.75rem; color:var(--text-muted);">Nur 40% der Mittelst&auml;ndler nutzen ein ISMS. 60% haben keinen dedizierten CISO.</div>
+              </div>
+              <div style="text-align:right;">
+                <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Investitions-Benchmark</span>
+                <div style="font-family:var(--font-display); font-size:1.4rem; font-weight:700; color:var(--accent-blue);">4&ndash;15%</div>
+                <div style="font-size:0.75rem; color:var(--text-muted);">des IT-Budgets f&uuml;r Security. 77% der Unternehmen erh&ouml;hen 2026 ihre Ausgaben.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PEER PRESSURE SECTION -->
+        <div style="margin-bottom:0.5rem;">
+          <div class="section-title" style="font-size:0.9rem; margin-bottom:0.75rem;">&#x1F465; Branchenvergleich &mdash; Was Ihre Wettbewerber tun</div>
+        </div>
+
+        <div class="insurance-grid" style="margin-bottom:1.5rem;">
+          <div class="ins-card">
+            <h4>Unternehmen mit ISMS</h4>
+            <div class="ins-metric up">40%</div>
+            <div class="ins-desc">Nur 40% der Mittelst&auml;ndler haben ein ISMS nach ISO 27001 (2019: 26%). Die Schere w&auml;chst &mdash; wer keins hat, verliert Auftr&auml;ge.</div>
+          </div>
+          <div class="ins-card">
+            <h4>Budget-Erh&ouml;hung geplant</h4>
+            <div class="ins-metric neutral">77%</div>
+            <div class="ins-desc">Ihrer Wettbewerber erh&ouml;hen 2026 das Security-Budget. 36% steigern um 6&ndash;10%, weitere 10% sogar um bis zu 14%.</div>
+          </div>
+          <div class="ins-card">
+            <h4>CEOs sehen Security als Wachstum</h4>
+            <div class="ins-metric neutral">85%</div>
+            <div class="ins-desc">Laut Gartner sehen 85% der CEOs Cybersecurity als kritischen Faktor f&uuml;r k&uuml;nftiges Unternehmenswachstum &mdash; nicht als Kostenstelle.</div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section">
+          <div class="cta-badge">Kostenlos &bull; 30 Minuten &bull; Unverbindlich</div>
+          <div class="cta-title">Ihre pers&ouml;nliche NIS2-Risikoanalyse</div>
+          <div class="cta-subtitle">
+            Sie haben gerade gesehen, wo die Risiken liegen. Unser vCISO-Team pr&uuml;ft in 30 Minuten, ob Ihr Unternehmen von NIS2 betroffen ist, wo Ihre gr&ouml;&szlig;ten L&uuml;cken sind &mdash; und wie Sie Ihre pers&ouml;nliche Haftung sofort reduzieren.
+          </div>
+          <a href="#" class="cta-button" id="ctaButton">
+            &#x1F4C5; Kostenlosen Check vereinbaren
+          </a>
+          <div class="cta-features">
+            <div class="cta-feature"><span class="check">&#x2713;</span> NIS2-Betroffenheitspr&uuml;fung</div>
+            <div class="cta-feature"><span class="check">&#x2713;</span> Haftungs-Gap-Analyse</div>
+            <div class="cta-feature"><span class="check">&#x2713;</span> 90-Tage-Roadmap</div>
+            <div class="cta-feature"><span class="check">&#x2713;</span> Keine Vertragsbindung</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-left">
+      CTI Analyst Report &bull; FAIR Framework v4 &bull; Quellen: CISA, BSI, IBM X-Force, WEF, Hacker News<br>
+      DISCLAIMER: Keine Anlageberatung. FAIR-Sch&auml;tzungen mit breiten Konfidenzintervallen.
+    </div>
+    <div class="footer-right">
+      <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" class="footer-link">CISA KEV</a>
+      <a href="https://reports.weforum.org/docs/WEF_Global_Cybersecurity_Outlook_2026.pdf" target="_blank" class="footer-link">WEF Outlook</a>
+    </div>
+  </footer>
+
+  <script>
+    // ===== DATA LAYER =====
+    // This data is updated by the GitHub Actions workflow
+    const DASHBOARD_DATA = {
+      lastUpdate: "2026-03-15T09:00:00Z",
+      threats: [
+        {
+          name: "GlassWorm Supply Chain Worm",
+          vector: "Software Supply Chain (VS Code / npm / GitHub)",
+          actor: "Organisierte Cyberkriminalit\u00e4t (finanziell); RU-nexus",
+          velocity: "150+ GitHub Repos, 72+ Open VSX Extensions, 35.800+ Installationen",
+          severity: "crit",
+          tag: "KRITISCH"
+        },
+        {
+          name: "Cisco SD-WAN CVE-2026-20127",
+          vector: "Authentication Bypass / Zero-Day (aktiv seit 2023)",
+          actor: "UAT-8616 (APT, geopolitisch)",
+          velocity: "CISA ED 26-03; verteilte Enterprise-Netzwerke global",
+          severity: "crit",
+          tag: "KRITISCH"
+        },
+        {
+          name: "Stryker Wiper (Handala/Iran)",
+          vector: "Destructive Wiper (kein Ransomware)",
+          actor: "Handala (geopolitisch/ideologisch); Iran-nexus",
+          velocity: "200.000+ Systeme, 56.000 Mitarbeiter, 79 L\u00e4nder",
+          severity: "crit",
+          tag: "KRITISCH"
+        },
+        {
+          name: "Chrome Zero-Days CVE-2026-3909/3910",
+          vector: "Browser-Exploits (OOB write, V8 RCE)",
+          actor: "Unbekannt (Google best\u00e4tigt aktive Ausnutzung)",
+          velocity: "Milliarden Chrome-Nutzer global exponiert",
+          severity: "high",
+          tag: "NEU"
+        },
+        {
+          name: "F5 BIG-IP Source Code Exfiltration",
+          vector: "Nation-State Source Code Theft",
+          actor: "Staatlicher Akteur (geopolitisch)",
+          velocity: "CISA ED 26-01; latentes Risiko bei 48 Fortune-50",
+          severity: "high",
+          tag: "NEU"
+        },
+        {
+          name: "Qualcomm CVE-2026-21385 (234 Chipsets)",
+          vector: "Firmware-level Integer Overflow",
+          actor: "Unbekannt (aktiv exploited ITW)",
+          velocity: "234 Chipsets, BYOD weltweit; Patch via OTA verz\u00f6gert",
+          severity: "high",
+          tag: ""
+        },
+        {
+          name: "Camaro Dragon / PlugX (Qatar)",
+          vector: "AI-driven Phishing + Spear-Phishing",
+          actor: "China-linked APT (Energie/Milit\u00e4r)",
+          velocity: "Gezielt auf Golf-Energiesektor",
+          severity: "med",
+          tag: ""
+        }
+      ],
+      vulns: [
+        { cve: "CVE-2026-20127", name: "Cisco SD-WAN", sectors: "Fintech, Cloud, Krit. Infrastruktur, Telko", cvss: "10.0", cvssClass: "crit", exploit: "Weaponized (seit 2023)", urgency: 10, status: "CISA ED 26-03" },
+        { cve: "GlassWorm", name: "(kein CVE)", sectors: "Software-Entwicklung, DevOps, Fintech", cvss: "9.3", cvssClass: "crit", exploit: "Selbst-propagierend", urgency: 10, status: "Aktiv, laufend" },
+        { cve: "CVE-2026-3909/3910", name: "Chrome", sectors: "Alle Sektoren (Browser)", cvss: "8.8", cvssClass: "high", exploit: "Active ITW", urgency: 9, status: "Patch verf\u00fcgbar" },
+        { cve: "CVE-2026-22719", name: "VMware Aria", sectors: "Cloud, Enterprise IT, DevOps", cvss: "8.1", cvssClass: "high", exploit: "KEV-gelistet", urgency: 8, status: "Patch verf\u00fcgbar" },
+        { cve: "CVE-2026-21385", name: "Qualcomm Display", sectors: "Mobile, IoT, BYOD-Enterprise", cvss: "7.8", cvssClass: "high", exploit: "Active ITW", urgency: 7, status: "OTA-Patch pending" },
+        { cve: "CVE-2026-1603", name: "Ivanti EPM", sectors: "Enterprise IT, Managed Services", cvss: "7.5", cvssClass: "high", exploit: "KEV-gelistet", urgency: 8, status: "Patch verf\u00fcgbar" },
+        { cve: "CISA ED 26-01", name: "F5 BIG-IP", sectors: "Fintech, Cloud, Krit. Infrastruktur", cvss: "N/A", cvssClass: "med", exploit: "Latent (Quellcode)", urgency: 7, status: "Inventarisierung" }
+      ],
+      financials: [
+        { name: "Stryker Wiper (Handala)", elm: "$150\u2013400M", market: "SYK \u22129%; MedTech \u22122\u20133%", insurance: "Pr\u00e4mien +15\u201325% Manufacturing; Wiper-Exclusions", systemic: "HOCH", systemicClass: "systemic-high" },
+        { name: "GlassWorm Supply Chain", elm: "$50\u2013200M", market: "DevTool-Sektor unter Druck", insurance: "Supply-Chain-Sublimits versch\u00e4rft", systemic: "SEHR HOCH", systemicClass: "systemic-high" },
+        { name: "Cisco SD-WAN", elm: "$20\u201380M/Firma", market: "CSCO neutral; SASE \u22121\u20132%", insurance: "Erh\u00f6hte Selbstbeteiligung", systemic: "HOCH", systemicClass: "systemic-high" },
+        { name: "F5 BIG-IP Source Leak", elm: "Latent: $500M+", market: "FFIV \u22124\u20136%", insurance: "F5-Inventarisierung als Bedingung", systemic: "SEHR HOCH", systemicClass: "systemic-high" }
+      ],
+      fair: [
+        { scenario: "Supply-Chain-Kompromittierung (GlassWorm)", p: "35\u201345%", l1: "\u20ac15\u201350M", l2: "\u20ac30\u2013120M", r: "\u20ac16\u201376M", conf: "Mittel (FAIR 3)" },
+        { scenario: "Destructive Wiper auf Manufacturing", p: "10\u201320%", l1: "\u20ac50\u2013200M", l2: "\u20ac80\u2013300M", r: "\u20ac13\u2013100M", conf: "Niedrig-Mittel (FAIR 2)" },
+        { scenario: "SD-WAN / Netzwerk-Breach", p: "20\u201330%", l1: "\u20ac10\u201340M", l2: "\u20ac20\u201360M", r: "\u20ac6\u201330M", conf: "Mittel (FAIR 3)" },
+        { scenario: "Mobile Firmware Exploit (BYOD)", p: "25\u201340%", l1: "\u20ac5\u201315M", l2: "\u20ac10\u201330M", r: "\u20ac4\u201318M", conf: "Mittel (FAIR 3)" }
+      ],
+      actions: [
+        { type: "critical-action", icon: "\uD83D\uDEA8", title: "Cisco SD-WAN: CISA ED 26-03 umsetzen", desc: "Alle Catalyst SD-WAN Systeme inventarisieren, Management-Interfaces isolieren, Patches sofort anwenden. Deadline bereits \u00fcberschritten.", tag: "0\u201324h", tagClass: "tag-critical" },
+        { type: "critical-action", icon: "\uD83D\uDEA8", title: "GlassWorm: VS Code / npm / GitHub Audit", desc: "Anti-Trojan-Source-Tools in CI/CD integrieren. Egress-Monitoring auf Solana-Blockchain und Google-Calendar-C2 implementieren. Alle Extensions pr\u00fcfen.", tag: "0\u201348h", tagClass: "tag-critical" },
+        { type: "critical-action", icon: "\uD83D\uDEA8", title: "Chrome sofort aktualisieren", desc: "Update auf Version 134.0.6998.117/.118 zur Behebung von CVE-2026-3909 und CVE-2026-3910 (aktiv exploited).", tag: "Sofort", tagClass: "tag-critical" },
+        { type: "warn-action", icon: "\uD83D\uDEE1\uFE0F", title: "F5 BIG-IP Inventarisierung (ED 26-01)", desc: "Alle F5-Produkte inventarisieren, Management-Interfaces vom Internet trennen, verst\u00e4rktes Monitoring f\u00fcr anomale Zugriffsmuster.", tag: "0\u201372h", tagClass: "tag-critical" },
+        { type: "info-action", icon: "\uD83D\uDCB0", title: "Strategic Hedge: Software Supply Chain Security", desc: "SBOM f\u00fcr alle Abh\u00e4ngigkeiten, Code-Signierung, Behavioral Detection. Investition: \u20ac200\u2013500K p.a. vs. Risiko \u20ac16\u201376M p.a.", tag: "ROI: Hoch", tagClass: "tag-invest" },
+        { type: "info-action", icon: "\uD83D\uDCB0", title: "Strategic Hedge: Zero Trust Network Architecture", desc: "Microsegmentierung von SD-WAN und Management-Plane. Investition: \u20ac500K\u20131.5M vs. Risiko \u20ac6\u201330M p.a.", tag: "ROI: Hoch", tagClass: "tag-invest" },
+        { type: "info-action", icon: "\uD83D\uDCB0", title: "OT/IT-Konvergenz-Sicherheit", desc: "Hardware-enforced Unidirectional Gateways gem\u00e4\u00df NCSC/CISA Guidance 2026. Besonders relevant nach Stryker-Pr\u00e4zedenzfall.", tag: "ROI: Mittel-Hoch", tagClass: "tag-invest" }
+      ],
+      changelog: [
+        { date: "2026-03-15", text: "[INITIAL] Dashboard erstellt. Initialer Deep-Scan \u00fcber CISA, BSI, IBM X-Force, WEF, Hacker News, SecurityWeek, Dark Reading." },
+        { date: "2026-03-15", text: "[KRITISCH] GlassWorm neue Welle: 150+ GitHub Repos kompromittiert (03.\u201309. M\u00e4rz). Multi-\u00d6kosystem-Push \u00fcber npm, VS Code, GitHub." },
+        { date: "2026-03-15", text: "[KRITISCH] Stryker Wiper-Angriff durch Handala. SYK -9%. 200.000+ Systeme zerst\u00f6rt." },
+        { date: "2026-03-15", text: "[NEU] Chrome Zero-Days CVE-2026-3909/3910 in CISA KEV aufgenommen (12. M\u00e4rz)." },
+        { date: "2026-03-15", text: "[NEU] NY DFS Industry Letter: Erh\u00f6hte Warnstufe f\u00fcr Finanzsektor wegen geopolitischer Konflikte (03. M\u00e4rz)." }
+      ]
+    };
+
+    // ===== RENDER FUNCTIONS =====
+    function renderThreats() {
+      const tbody = document.getElementById('threatTableBody');
+      tbody.innerHTML = DASHBOARD_DATA.threats.map(t => `
+        <tr>
+          <td>
+            ${t.tag ? `<span class="severity ${t.severity === 'crit' ? 'crit' : t.tag === 'NEU' ? 'high' : 'med'}" style="margin-right:0.4rem;">${t.tag}</span>` : ''}
+            ${t.name}
+          </td>
+          <td>${t.vector}</td>
+          <td>${t.actor}</td>
+          <td>${t.velocity}</td>
+          <td><span class="severity ${t.severity}">${t.severity === 'crit' ? 'CRITICAL' : t.severity === 'high' ? 'HIGH' : 'MEDIUM'}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderVulns() {
+      const tbody = document.getElementById('vulnTableBody');
+      tbody.innerHTML = DASHBOARD_DATA.vulns.map(v => `
+        <tr>
+          <td>${v.cve}<br><span style="color:var(--text-muted);font-weight:400;font-size:0.75rem;">${v.name}</span></td>
+          <td>${v.sectors}</td>
+          <td><span class="severity ${v.cvssClass}">${v.cvss}</span></td>
+          <td>${v.exploit}</td>
+          <td>
+            <div class="urgency-bar">
+              <div style="width:80px;height:6px;background:rgba(30,45,74,0.5);border-radius:3px;overflow:hidden;">
+                <div class="urgency-fill u${v.urgency}"></div>
+              </div>
+              <span class="urgency-num" style="color:${v.urgency >= 9 ? 'var(--critical)' : v.urgency >= 7 ? 'var(--high)' : 'var(--accent-blue)'};">${v.urgency}/10</span>
+            </div>
+          </td>
+          <td><span style="font-family:var(--font-mono);font-size:0.72rem;">${v.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderFinancials() {
+      const grid = document.getElementById('finGrid');
+      grid.innerHTML = DASHBOARD_DATA.financials.map(f => `
+        <div class="fin-card">
+          <div class="fin-card-header">
+            <div class="fin-card-title">${f.name}</div>
+            <div class="fin-elm">${f.elm}</div>
+          </div>
+          <div class="fin-row">
+            <span class="fin-row-label">Market Signal</span>
+            <span class="fin-row-value">${f.market}</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-row-label">Insurance</span>
+            <span class="fin-row-value">${f.insurance}</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-row-label">Systemic Risk</span>
+            <span class="fin-row-value ${f.systemicClass}">${f.systemic}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderFair() {
+      const tbody = document.getElementById('fairTableBody');
+      tbody.innerHTML = DASHBOARD_DATA.fair.map(f => `
+        <tr>
+          <td>${f.scenario}</td>
+          <td><span style="font-family:var(--font-mono);">${f.p}</span></td>
+          <td>${f.l1}</td>
+          <td>${f.l2}</td>
+          <td style="font-weight:600;color:var(--critical);">${f.r}</td>
+          <td style="color:var(--text-muted);">${f.conf}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderActions() {
+      const list = document.getElementById('actionList');
+      list.innerHTML = DASHBOARD_DATA.actions.map(a => `
+        <div class="action-item ${a.type}">
+          <div class="action-icon">${a.icon}</div>
+          <div class="action-body">
+            <h4>${a.title}</h4>
+            <p>${a.desc}</p>
+            <span class="action-tag ${a.tagClass}">${a.tag}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderChangelog() {
+      const el = document.getElementById('changelogEntries');
+      el.innerHTML = DASHBOARD_DATA.changelog.map(c => `
+        <div class="changelog-entry">
+          <span class="changelog-date">${c.date}</span>
+          <span class="changelog-text">${c.text}</span>
+        </div>
+      `).join('');
+    }
+
+    function updateTimestamp() {
+      const d = new Date(DASHBOARD_DATA.lastUpdate);
+      document.getElementById('lastUpdate').textContent =
+        `Letztes Update: ${d.toLocaleDateString('de-DE')} ${d.toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'})} UTC`;
+    }
+
+    // ===== CEO SCORECARD RENDERS =====
+    function renderDeadlines() {
+      const deadlines = [
+        { name: "BSI-Registrierung (NIS2)", date: "2026-03-06", status: "ÜBERFÄLLIG", statusClass: "crit", desc: "Besonders wichtige Einrichtungen mussten sich bis 06.03.2026 beim BSI registrieren." },
+        { name: "KRITIS-Dachgesetz", date: "2026-07-01", status: "IN KÜRZE", statusClass: "high", desc: "Betreiber kritischer Infrastrukturen müssen sich registrieren und Schutzmaßnahmen nachweisen." },
+        { name: "EU AI Act (Hochrisiko)", date: "2026-08-02", status: "VORBEREITEN", statusClass: "high", desc: "Pflicht-Konformitätsbewertung, Risikomanagement und Registrierung für Hochrisiko-KI-Systeme." },
+        { name: "NIS2 Audit-Welle erwartet", date: "2026-09-01", status: "ERWARTET", statusClass: "med", desc: "Behörden werden Wirksamkeit der Sicherheitsmaßnahmen kontrollieren, nicht nur Formalien." }
+      ];
+
+      const today = new Date();
+      const grid = document.getElementById('deadlineGrid');
+      if (!grid) return;
+      grid.innerHTML = deadlines.map(d => {
+        const target = new Date(d.date);
+        const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+        const countdown = diffDays < 0 ? `${Math.abs(diffDays)} Tage überfällig` : diffDays === 0 ? 'HEUTE' : `${diffDays} Tage`;
+        const countdownColor = diffDays < 0 ? 'var(--critical)' : diffDays < 30 ? 'var(--high)' : 'var(--accent-blue)';
+        return `
+          <div class="deadline-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem;">
+              <span style="font-family:var(--font-display);font-size:0.85rem;font-weight:600;">${d.name}</span>
+              <span class="severity ${d.statusClass}" style="flex-shrink:0;">${d.status}</span>
+            </div>
+            <div style="font-family:var(--font-mono);font-size:1.1rem;font-weight:700;color:${countdownColor};margin-bottom:0.3rem;">${countdown}</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.4;">${d.desc}</div>
+            <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text-muted);margin-top:0.3rem;">Stichtag: ${target.toLocaleDateString('de-DE')}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderReadiness() {
+      const items = [
+        { label: "Multi-Faktor-Authentifizierung (MFA)", pct: 62, status: "Lückenhaft", tip: "NIS2-Pflicht. Nur 62% der Mittelständler nutzen MFA vollständig." },
+        { label: "Incident-Response-Plan (getestet)", pct: 28, status: "Kritisch", tip: "Nur 28% haben einen getesteten IR-Plan. NIS2 fordert 24h-Erstmeldung." },
+        { label: "ISMS nach ISO 27001", pct: 40, status: "Ausbaufähig", tip: "40% nutzen ein ISMS (2019: 26%). Standard-Anforderung für NIS2-Compliance." },
+        { label: "Backup-Strategie (immutable, getestet)", pct: 35, status: "Kritisch", tip: "Immutable Backups sind Pflicht bei Double-Extortion-Ransomware." },
+        { label: "Geschäftsführer-Schulung Cybersecurity", pct: 22, status: "Kritisch", tip: "NIS2 § 38 BSIG: Pflichtschulung alle 3 Jahre. Nicht delegierbar." },
+        { label: "Lieferketten-Risikomanagement", pct: 30, status: "Kritisch", tip: "67% fürchten Supply-Chain-Angriffe (PwC). DORA/NIS2 fordern Drittanbieter-Prüfung." },
+        { label: "Dedizierter CISO / vCISO", pct: 38, status: "Lückenhaft", tip: "Nur 38% haben einen Cyber-Verantwortlichen auf C-Level." },
+        { label: "24/7 Monitoring / SOC", pct: 18, status: "Kritisch", tip: "Die meisten KMU haben keine 24/7-Erreichbarkeit. NIS2 fordert Notfall-Organisation." }
+      ];
+
+      const container = document.getElementById('readinessItems');
+      if (!container) return;
+      container.innerHTML = items.map(item => {
+        const barColor = item.pct >= 60 ? 'var(--accent-green)' : item.pct >= 40 ? 'var(--high)' : 'var(--critical)';
+        const statusColor = item.status === 'Kritisch' ? 'var(--critical)' : item.status === 'Lückenhaft' ? 'var(--high)' : 'var(--accent-green)';
+        return `
+          <div class="readiness-item">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.35rem;">
+              <span style="font-size:0.82rem;font-weight:500;">${item.label}</span>
+              <span style="font-family:var(--font-mono);font-size:0.72rem;font-weight:600;color:${statusColor};">${item.status} (${item.pct}%)</span>
+            </div>
+            <div style="width:100%;height:6px;background:rgba(30,45,74,0.5);border-radius:3px;overflow:hidden;margin-bottom:0.25rem;">
+              <div style="width:${item.pct}%;height:100%;background:${barColor};border-radius:3px;transition:width 0.6s ease;"></div>
+            </div>
+            <div style="font-size:0.7rem;color:var(--text-muted);line-height:1.3;">${item.tip}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ===== TAB NAVIGATION =====
+    function showTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    // ===== INIT =====
+    renderThreats();
+    renderVulns();
+    renderFinancials();
+    renderFair();
+    renderActions();
+    renderChangelog();
+    renderDeadlines();
+    renderReadiness();
+    updateTimestamp();
+  </script>
+</body>
+</html>

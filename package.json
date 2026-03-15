@@ -1,0 +1,17 @@
+{
+  "name": "cti-dashboard",
+  "version": "1.0.0",
+  "description": "Cyber-Financial Intelligence Dashboard — Self-updating CTI report hosted on GitHub Pages",
+  "private": true,
+  "scripts": {
+    "fetch": "node scripts/fetch-intel.js",
+    "update": "node scripts/update-dashboard.js",
+    "refresh": "npm run fetch && npm run update",
+    "dev": "npx serve ."
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "author": "CTI Analyst",
+  "license": "MIT"
+}
