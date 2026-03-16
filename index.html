@@ -2242,11 +2242,11 @@
         { type: "info-action", icon: "\uD83D\uDCB0", title: "OT/IT-Konvergenz-Sicherheit", desc: "Hardware-enforced Unidirectional Gateways gem\u00e4\u00df NCSC/CISA Guidance 2026. Besonders relevant nach Stryker-Pr\u00e4zedenzfall.", tag: "ROI: Mittel-Hoch", tagClass: "tag-invest" }
       ],
       changelog: [
-        { date: "2026-03-15", text: "[INITIAL] Dashboard erstellt. Initialer Deep-Scan \u00fcber CISA, BSI, IBM X-Force, WEF, Hacker News, SecurityWeek, Dark Reading." },
+        { date: "2026-03-15", text: "[INITIAL] Dashboard erstellt. Initialer Deep-Scan \u00fcber CISA, BSI, IBM X-Force, WEF, Hacker News, SecurityWeek, Dark Reading.", text_en: "[INITIAL] Dashboard created. Initial deep scan via CISA, BSI, IBM X-Force, WEF, Hacker News, SecurityWeek, Dark Reading." },
         { date: "2026-03-15", text: "[KRITISCH] GlassWorm neue Welle: 150+ GitHub Repos kompromittiert (03.\u201309. M\u00e4rz). Multi-\u00d6kosystem-Push \u00fcber npm, VS Code, GitHub." },
-        { date: "2026-03-15", text: "[KRITISCH] Stryker Wiper-Angriff durch Handala. SYK -9%. 200.000+ Systeme zerst\u00f6rt." },
+        { date: "2026-03-15", text: "[KRITISCH] Stryker Wiper-Angriff durch Handala. SYK -9%. 200.000+ Systeme zerst\u00f6rt.", text_en: "[CRITICAL] GlassWorm new wave: 150+ GitHub repos compromised (Mar 03\u201309). Multi-ecosystem push via npm, VS Code, GitHub.", text_en: "[CRITICAL] Stryker wiper attack by Handala. SYK -9%. 200,000+ systems destroyed." },
         { date: "2026-03-15", text: "[NEU] Chrome Zero-Days CVE-2026-3909/3910 in CISA KEV aufgenommen (12. M\u00e4rz)." },
-        { date: "2026-03-15", text: "[NEU] NY DFS Industry Letter: Erh\u00f6hte Warnstufe f\u00fcr Finanzsektor wegen geopolitischer Konflikte (03. M\u00e4rz)." }
+        { date: "2026-03-15", text: "[NEU] NY DFS Industry Letter: Erh\u00f6hte Warnstufe f\u00fcr Finanzsektor wegen geopolitischer Konflikte (03. M\u00e4rz).", text_en: "[NEW] Chrome zero-days CVE-2026-3909/3910 added to CISA KEV (March 12).", text_en: "[NEW] NY DFS Industry Letter: Elevated threat level for financial sector due to geopolitical conflicts (March 03)." }
       ],
       breakingNews: [
         {
@@ -2261,14 +2261,18 @@
           category: "Ransomware",
           title: "Stryker-Wiper: Iranische Handala-Gruppe zerst\u00f6rt 200.000+ Systeme in 79 L\u00e4ndern", title_en: "Stryker wiper: Iranian Handala group destroys 200,000+ systems across 79 countries",
           summary: "Ein destruktiver Wiper-Angriff (kein Ransomware) der iranisch-gelinkten Gruppe Handala hat den Medizintechnik-Konzern Stryker getroffen. 56.000 Mitarbeiter betroffen. Aktie fiel sofort um 9%. Keine M\u00f6glichkeit zur Datenwiederherstellung.",
-          impact: "MedTech- und Manufacturing-Sektor alarmiert. Geopolitische Wiper-Angriffe nehmen zu. Cyber-Versicherungen pr\u00fcfen Exclusions f\u00fcr staatsnahe Angriffe."
+          impact: "MedTech- und Manufacturing-Sektor alarmiert. Geopolitische Wiper-Angriffe nehmen zu. Cyber-Versicherungen pr\u00fcfen Exclusions f\u00fcr staatsnahe Angriffe.", summary_en: "A destructive wiper attack (no ransomware) by the Iranian-linked group Handala hit medical device manufacturer Stryker. 56,000 employees affected. Stock dropped 9% immediately. No possibility of data recovery.", impact_en: "MedTech and manufacturing sectors alarmed. Geopolitical wiper attacks increasing. Cyber insurers reviewing exclusions for state-sponsored attacks."
+
+
         },
         {
           date: "12. M\u00e4rz 2026",
           category: "Regulatory",
           title: "NIS2 Enforcement: BSI-Registrierungsfrist abgelaufen \u2014 30.000 Unternehmen unter Aufsicht", title_en: "NIS2 enforcement: BSI registration deadline expired \u2014 30,000 companies under supervision",
           summary: "Die Frist zur BSI-Registrierung nach NIS2 ist am 06. M\u00e4rz abgelaufen. Gesch\u00e4ftsf\u00fchrer haften pers\u00f6nlich mit Privatverm\u00f6gen. Bu\u00dfgelder bis \u20ac10M oder 2% des globalen Umsatzes. Experten erwarten 2026 eine Welle beh\u00f6rdlicher Audits.",
-          impact: "Jedes nicht-registrierte Unternehmen hat bereits einen formalen Versto\u00df begangen. D&O-Versicherungen k\u00f6nnen Deckung verweigern. vCISO-Nachfrage steigt sprunghaft."
+          impact: "Jedes nicht-registrierte Unternehmen hat bereits einen formalen Versto\u00df begangen. D&O-Versicherungen k\u00f6nnen Deckung verweigern. vCISO-Nachfrage steigt sprunghaft.", summary_en: "The BSI registration deadline under NIS2 expired on March 6. Managing directors are personally liable with their private assets. Fines up to \u20ac10M or 2% of global revenue. Experts expect a wave of regulatory audits in 2026.", impact_en: "Every unregistered company has already committed a formal violation. D&O insurance may refuse coverage. vCISO demand surging."
+
+
         }
       ],
       execSummaries: [
@@ -2278,6 +2282,7 @@
           level: "KRITISCH",
           levelClass: "crit",
           body: "Die Woche 09.\u201315. M\u00e4rz markiert eine der kritischsten Bedrohungslagen des Jahres. Die GlassWorm-Supply-Chain-Kampagne hat mit 150+ kompromittierten GitHub-Repositories eine neue Dimension erreicht. Gleichzeitig demonstriert der Handala-Wiper-Angriff auf Stryker (200.000 Systeme, 79 L\u00e4nder, SYK -9%) die wachsende Gefahr geopolitisch motivierter destruktiver Cyberangriffe auf den Industriesektor. Chrome Zero-Days (CVE-2026-3909/3910) betreffen Milliarden Nutzer. Empfehlung: Sofortiger Audit aller Software-Dependencies, Cisco SD-WAN Patch (CISA ED 26-03), Chrome-Update auf allen Endpunkten.",
+          body_en: "The week of Mar 09\u201315 marks one of the most critical threat situations of the year. The GlassWorm supply chain campaign reached a new dimension with 150+ compromised GitHub repositories. Simultaneously, the Handala wiper attack on Stryker (200,000 systems, 79 countries, SYK -9%) demonstrates the growing danger of geopolitically motivated destructive cyberattacks on the industrial sector. Chrome zero-days (CVE-2026-3909/3910) affect billions of users. Recommendation: Immediate audit of all software dependencies, Cisco SD-WAN patch (CISA ED 26-03), Chrome update on all endpoints.",
           sources: "CISA, BSI, IBM X-Force, SecurityWeek, Hacker News"
         },
         {
@@ -2286,6 +2291,7 @@
           level: "HOCH",
           levelClass: "high",
           body: "Mit Ablauf der BSI-Registrierungsfrist am 06. M\u00e4rz beginnt die aktive Durchsetzung des NIS2-Umsetzungsgesetzes f\u00fcr ~30.000 deutsche Unternehmen. Parallel eskaliert der F5 BIG-IP Quellcode-Diebstahl (CISA ED 26-01): Ein staatlicher Akteur besitzt jetzt propriet\u00e4ren Source Code, der Schwachstellenanalyse bei 48 der Fortune-50 erm\u00f6glicht. Camaro Dragon (China-linked) intensiviert Operationen gegen den Golf-Energiesektor mit PlugX und Cobalt Strike. Empfehlung: NIS2-Registrierung sofort nachholen, F5-Systeme inventarisieren, Gulf-Energy-Kunden warnen.",
+          body_en: "With the BSI registration deadline expiring on March 6, active enforcement of the NIS2 Implementation Act begins for ~30,000 German companies. In parallel, the F5 BIG-IP source code theft (CISA ED 26-01) escalates: a state actor now possesses proprietary source code enabling vulnerability analysis for 48 Fortune-50 companies. Camaro Dragon (China-linked) intensifies operations against the Gulf energy sector with PlugX and Cobalt Strike. Recommendation: Complete NIS2 registration immediately, inventory F5 systems, warn Gulf energy clients.",
           sources: "BSI, CISA, NY DFS, Eye Security"
         },
         {
@@ -2294,6 +2300,7 @@
           level: "MITTEL",
           levelClass: "med",
           body: "Gro\u00dfangelegte Credential-Theft-Operationen pr\u00e4gen die Woche. Angreifer nutzen KI-generierte Phishing-Seiten, die legitime Login-Portale von Cloud-Diensten imitieren. 82,6% aller Phishing-Mails sind mittlerweile KI-generiert (KnowBe4). Positiv: NCSC und CISA ver\u00f6ffentlichen gemeinsam mit BSI und internationalen Partnern die \u201eSecure Connectivity Principles for OT\u201c \u2014 erstmals wird Push-Only-Architektur und Hardware-enforced Security f\u00fcr OT-Netzwerke empfohlen. Empfehlung: Phishing-Simulationen intensivieren, OT-Guidance evaluieren.",
+          body_en: "Large-scale credential theft operations dominate the week. Attackers use AI-generated phishing pages mimicking legitimate login portals of cloud services. 82.6% of all phishing emails are now AI-generated (KnowBe4). Positive: NCSC and CISA publish joint Secure Connectivity Principles for OT together with BSI and international partners \u2014 for the first time recommending push-only architecture and hardware-enforced security for OT networks. Recommendation: Intensify phishing simulations, evaluate OT guidance.",
           sources: "NCSC, CISA, BSI, KnowBe4, Eye Security IR Report"
         }
       ]
@@ -2396,13 +2403,15 @@
     }
 
     function renderChangelog() {
+      var L = currentLang;
       const el = document.getElementById('changelogEntries');
-      el.innerHTML = DASHBOARD_DATA.changelog.map(c => `
-        <div class="changelog-entry">
+      el.innerHTML = DASHBOARD_DATA.changelog.map(c => {
+        var txt = L==='en'&&c.text_en ? c.text_en : c.text;
+        return `<div class="changelog-entry">
           <span class="changelog-date">${c.date}</span>
-          <span class="changelog-text">${c.text}</span>
-        </div>
-      `).join('');
+          <span class="changelog-text">${txt}</span>
+        </div>`;
+      }).join('');
     }
 
     function updateTimestamp() {
@@ -2674,9 +2683,9 @@
       var L = currentLang;
       var el = document.getElementById('breakingNewsItems');
       if (!el) return;
-      var news = DASHBOARD_DATA.breakingNews || [];
+      var news = (DASHBOARD_DATA.breakingNews || []).slice(0, 3);
       el.innerHTML = news.map(function(n) {
-        var tagColor = n.category === 'Ransomware' ? 'var(--critical)' : n.category === 'Supply Chain' ? 'var(--high)' : n.category === 'Regulatory' ? 'var(--accent-blue)' : '#6b7f6a';
+        var tagColor = n.category === 'Ransomware' ? 'var(--critical)' : n.category === 'Supply Chain' ? 'var(--high)' : n.category === 'Regulatory' ? 'var(--accent-blue)' : n.category === 'Zero-Day' ? 'var(--critical)' : n.category === 'APT' ? 'var(--high)' : '#6b7f6a';
         var tagBg = n.category === 'Ransomware' ? 'var(--critical-bg)' : n.category === 'Supply Chain' ? 'var(--high-bg)' : n.category === 'Regulatory' ? 'var(--medium-bg)' : 'rgba(107,127,106,0.07)';
         var title = L==='en'&&n.title_en ? n.title_en : n.title;
         var summary = L==='en'&&n.summary_en ? n.summary_en : n.summary;
@@ -2701,13 +2710,14 @@
       var summaries = DASHBOARD_DATA.execSummaries || [];
       el.innerHTML = summaries.map(function(s) {
         var title = L==='en'&&s.title_en ? s.title_en : s.title;
+        var body = L==='en'&&s.body_en ? s.body_en : s.body;
         return '<article class="exec-article">' +
           '<div class="exec-article-header">' +
             '<div class="exec-article-date">' + s.date + '</div>' +
             '<span class="severity ' + s.levelClass + '">' + s.level + '</span>' +
           '</div>' +
           '<h3 class="exec-article-title">' + title + '</h3>' +
-          '<p class="exec-article-body">' + s.body + '</p>' +
+          '<p class="exec-article-body">' + body + '</p>' +
           '<div class="exec-article-footer">' +
             '<span class="exec-author">Woodlands Advisory CTI</span>' +
             '<span class="exec-sources">' + s.sources + '</span>' +

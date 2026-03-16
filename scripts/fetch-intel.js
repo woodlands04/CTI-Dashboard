@@ -1,204 +1,76 @@
-/**
- * fetch-intel.js
- * 
- * Fetches the latest Cyber Threat Intelligence from multiple sources
- * using the Anthropic API with web search capability.
- * 
- * Outputs: data/latest-intel.json
- */
-
 const fs = require('fs');
 const path = require('path');
-
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 if (!ANTHROPIC_API_KEY) {
-  console.error('ERROR: ANTHROPIC_API_KEY not set. Skipping fetch.');
-  // Write empty update so the pipeline doesn't fail
-  const dataDir = path.join(__dirname, '..', 'data');
-  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-  fs.writeFileSync(path.join(dataDir, 'latest-intel.json'), JSON.stringify({ 
-    fetched: false, 
-    timestamp: new Date().toISOString(),
-    reason: 'No API key configured'
-  }, null, 2));
+  console.log('No API key. Skipping.');
+  const d = path.join(__dirname, '..', 'data');
+  if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+  fs.writeFileSync(path.join(d, 'latest-intel.json'), JSON.stringify({ fetched: false, timestamp: new Date().toISOString() }, null, 2));
   process.exit(0);
 }
 
-const SYSTEM_PROMPT = `You are a Senior Cyber Threat Intelligence (CTI) Analyst. Your task is to search for the latest cybersecurity incidents, vulnerabilities, and threat intelligence from the past 24 hours.
+const today = new Date().toISOString().split('T')[0];
+const isMonday = new Date().getDay() === 1;
 
-Search for:
-1. New CVEs added to CISA's Known Exploited Vulnerabilities catalog
-2. New CISA Emergency Directives or Advisories
-3. Major data breaches or ransomware attacks
-4. Supply chain attacks
-5. Nation-state cyber operations
-6. Critical vulnerabilities in enterprise software
-7. Financial impact of recent cyber incidents on stock markets
+const SYS = `You are a Senior CTI Analyst for Woodlands Advisory GmbH. Produce a BILINGUAL (DE+EN) intelligence update. Every text field MUST have both a German key and an English _en key. Today: ${today}.
 
-You MUST respond with ONLY valid JSON (no markdown, no backticks, no preamble) in this exact structure:
+Respond with ONLY valid JSON (no markdown fences):
 {
-  "timestamp": "ISO 8601 timestamp",
-  "threats": [
-    {
-      "name": "Threat name",
-      "vector": "Attack vector description",
-      "actor": "Threat actor and motivation",
-      "velocity": "Spread assessment",
-      "severity": "crit|high|med",
-      "tag": "KRITISCH|NEU|UPDATE|",
-      "isNew": true
-    }
-  ],
-  "vulns": [
-    {
-      "cve": "CVE-XXXX-XXXXX",
-      "name": "Product name",
-      "sectors": "Affected sectors",
-      "cvss": "Score",
-      "cvssClass": "crit|high|med",
-      "exploit": "Exploitation status",
-      "urgency": 1-10,
-      "status": "Current status",
-      "isNew": true
-    }
-  ],
-  "financials": [
-    {
-      "name": "Incident name",
-      "elm": "Estimated Loss Magnitude",
-      "market": "Market impact",
-      "insurance": "Insurance implications",
-      "systemic": "Risk level",
-      "systemicClass": "systemic-high|systemic-med",
-      "isNew": true
-    }
-  ],
-  "changelog": [
-    {
-      "date": "YYYY-MM-DD",
-      "text": "[TAG] Description of finding"
-    }
-  ],
-  "summary": "3-sentence executive summary of the most critical findings"
+  "timestamp":"${new Date().toISOString()}",
+  "threats":[{"name":"Name","vector":"DE","vector_en":"EN","actor":"DE","actor_en":"EN","velocity":"DE","velocity_en":"EN","severity":"crit|high|med","tag":"KRITISCH|NEU|","tag_en":"CRITICAL|NEW|","isNew":true}],
+  "vulns":[{"cve":"CVE-...","name":"Product","sectors":"DE","sectors_en":"EN","cvss":"9.8","cvssClass":"crit|high|med","exploit":"DE","exploit_en":"EN","urgency":10,"status":"DE","status_en":"EN","isNew":true}],
+  "financials":[{"name":"Name","elm":"$XXM","market":"DE","market_en":"EN","insurance":"DE","insurance_en":"EN","systemic":"DE","systemic_en":"EN","systemicClass":"systemic-high|systemic-med"}],
+  "breakingNews":[{"date":"${today}","category":"Ransomware|Supply Chain|APT|Regulatory|Data Breach|Zero-Day","title":"DE","title_en":"EN","summary":"DE 2-3 sentences","summary_en":"EN 2-3 sentences","impact":"DE","impact_en":"EN"}],
+  ${isMonday ? '"execSummary":{"date":"' + today + '","title":"DE","title_en":"EN","level":"KRITISCH|HOCH|MITTEL","levelClass":"crit|high|med","body":"DE 5-8 sentences","body_en":"EN 5-8 sentences","sources":"Sources"},' : ''}
+  "changelog":[{"date":"${today}","text":"[TAG] DE","text_en":"[TAG] EN"}],
+  "summary":"DE 3 sentences","summary_en":"EN 3 sentences"
 }
 
-If you find no new significant threats, return the JSON with empty arrays and a summary noting the stable threat landscape.`;
+RULES: Generate exactly 3 breaking news articles (different categories each). ${isMonday ? 'Generate a weekly executive summary for last week.' : ''} Focus on German/EU Mittelstand. Include NIS2/DORA/DSGVO implications. FAIR framework for financial estimates. EVERY field must have DE+EN.`;
 
-async function fetchIntel() {
-  console.log('🔍 Fetching latest cyber threat intelligence...');
-  console.log(`   Timestamp: ${new Date().toISOString()}`);
-
+async function run() {
+  console.log(`Fetching bilingual CTI (${today}, Monday=${isMonday})...`);
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
-        system: SYSTEM_PROMPT,
-        tools: [
-          {
-            type: 'web_search_20250305',
-            name: 'web_search'
-          }
-        ],
-        messages: [
-          {
-            role: 'user',
-            content: `Search for the latest cybersecurity incidents and threats from the past 24 hours. Today's date is ${new Date().toISOString().split('T')[0]}. 
-
-Search specifically for:
-- CISA advisories and emergency directives published today or yesterday
-- New entries in the CISA Known Exploited Vulnerabilities catalog
-- Major cyber attacks reported on The Hacker News, SecurityWeek, BleepingComputer, KrebsOnSecurity
-- BSI (German Federal Office for Information Security) warnings
-- Bloomberg/Reuters reports on financial impact of cyber incidents
-- Any new supply chain attacks or zero-day exploits
-
-Return your findings as the specified JSON structure.`
-          }
-        ]
+        model: 'claude-sonnet-4-20250514', max_tokens: 8000, system: SYS,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{ role: 'user', content: `Search CISA KEV, BSI, Hacker News, SecurityWeek, BleepingComputer, Bloomberg for cybersecurity incidents in the past 24h. Generate 3 bilingual breaking news articles.${isMonday ? ' Plus a weekly executive summary.' : ''} Return JSON only.` }]
       })
     });
-
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    
-    // Extract text content from response
-    const textContent = data.content
-      .filter(block => block.type === 'text')
-      .map(block => block.text)
-      .join('\n');
-
-    // Parse JSON from response (strip any markdown fences if present)
-    const cleanJson = textContent.replace(/```json\n?|\n?```/g, '').trim();
-    
+    if (!r.ok) throw new Error(`API ${r.status}`);
+    const data = await r.json();
+    const txt = data.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
     let intel;
-    try {
-      intel = JSON.parse(cleanJson);
-    } catch (parseErr) {
-      console.warn('⚠️  Could not parse JSON response. Saving raw text.');
-      intel = {
-        fetched: true,
-        parseError: true,
-        rawText: textContent,
-        timestamp: new Date().toISOString(),
-        threats: [],
-        vulns: [],
-        financials: [],
-        changelog: [],
-        summary: 'Parse error - manual review required'
-      };
+    try { intel = JSON.parse(txt.replace(/```json\n?|\n?```/g, '').trim()); }
+    catch (e) {
+      const m = txt.match(/\{[\s\S]*\}/);
+      intel = m ? JSON.parse(m[0]) : { parseError: true, threats: [], vulns: [], financials: [], breakingNews: [], changelog: [] };
     }
-
-    intel.fetched = true;
-    intel.fetchTimestamp = new Date().toISOString();
-
-    // Write to data directory
-    const dataDir = path.join(__dirname, '..', 'data');
-    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-    
-    const outputPath = path.join(dataDir, 'latest-intel.json');
-    fs.writeFileSync(outputPath, JSON.stringify(intel, null, 2));
-    
-    // Also keep a daily archive
-    const archiveDir = path.join(dataDir, 'archive');
-    if (!fs.existsSync(archiveDir)) fs.mkdirSync(archiveDir, { recursive: true });
-    const dateStr = new Date().toISOString().split('T')[0];
-    fs.writeFileSync(
-      path.join(archiveDir, `intel-${dateStr}.json`),
-      JSON.stringify(intel, null, 2)
-    );
-
-    console.log(`✅ Intelligence fetched successfully`);
-    console.log(`   Threats: ${intel.threats?.length || 0}`);
-    console.log(`   Vulnerabilities: ${intel.vulns?.length || 0}`);
-    console.log(`   Financial items: ${intel.financials?.length || 0}`);
-    console.log(`   Saved to: ${outputPath}`);
-
-  } catch (error) {
-    console.error('❌ Error fetching intelligence:', error.message);
-    
-    const dataDir = path.join(__dirname, '..', 'data');
-    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-    fs.writeFileSync(path.join(dataDir, 'latest-intel.json'), JSON.stringify({
-      fetched: false,
-      timestamp: new Date().toISOString(),
-      error: error.message,
-      threats: [],
-      vulns: [],
-      financials: [],
-      changelog: []
-    }, null, 2));
+    // Ensure _en fallbacks
+    (intel.threats || []).forEach(t => { ['vector','actor','velocity','tag'].forEach(k => { if (!t[k+'_en']) t[k+'_en'] = t[k]; }); });
+    (intel.vulns || []).forEach(v => { ['sectors','exploit','status'].forEach(k => { if (!v[k+'_en']) v[k+'_en'] = v[k]; }); });
+    (intel.breakingNews || []).forEach(n => { ['title','summary','impact'].forEach(k => { if (!n[k+'_en']) n[k+'_en'] = n[k]; }); });
+    (intel.changelog || []).forEach(c => { if (!c.text_en) c.text_en = c.text; });
+    if (!intel.summary_en) intel.summary_en = intel.summary || '';
+    if (intel.execSummary && !intel.execSummary.title_en) intel.execSummary.title_en = intel.execSummary.title;
+    if (intel.execSummary && !intel.execSummary.body_en) intel.execSummary.body_en = intel.execSummary.body;
+    intel.fetched = true; intel.fetchTimestamp = new Date().toISOString(); intel.bilingual = true;
+    const d = path.join(__dirname, '..', 'data');
+    if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+    fs.writeFileSync(path.join(d, 'latest-intel.json'), JSON.stringify(intel, null, 2));
+    const ad = path.join(d, 'archive');
+    if (!fs.existsSync(ad)) fs.mkdirSync(ad, { recursive: true });
+    fs.writeFileSync(path.join(ad, `intel-${today}.json`), JSON.stringify(intel, null, 2));
+    console.log(`Done! Threats:${intel.threats?.length||0} Vulns:${intel.vulns?.length||0} News:${intel.breakingNews?.length||0} Exec:${intel.execSummary?'YES':'no'}`);
+  } catch (e) {
+    console.error('Error:', e.message);
+    const d = path.join(__dirname, '..', 'data');
+    if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+    fs.writeFileSync(path.join(d, 'latest-intel.json'), JSON.stringify({ fetched: false, timestamp: new Date().toISOString(), error: e.message }, null, 2));
   }
 }
-
-fetchIntel();
+run();
