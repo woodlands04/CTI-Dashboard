@@ -876,6 +876,134 @@
       .chart-grid { grid-template-columns: 1fr; }
     }
 
+    /* ===== BREAKING NEWS ===== */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .news-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.15rem;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .news-card:hover {
+      border-color: #6b7f6a;
+      box-shadow: 0 4px 16px rgba(107,127,106,0.1);
+      transform: translateY(-2px);
+    }
+
+    .news-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .news-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .news-date {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .news-title {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 600;
+      line-height: 1.35;
+      margin-bottom: 0.5rem;
+      color: #000;
+    }
+
+    .news-body {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .news-impact {
+      margin-top: 0.6rem;
+      padding-top: 0.6rem;
+      border-top: 1px solid rgba(107,127,106,0.12);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 1000px) { .news-grid { grid-template-columns: 1fr; } }
+
+    /* ===== EXECUTIVE SUMMARIES ===== */
+    .exec-article {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .exec-article:hover {
+      border-color: #6b7f6a;
+      box-shadow: 0 4px 16px rgba(107,127,106,0.1);
+    }
+
+    .exec-article-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .exec-article-date {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .exec-article-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      line-height: 1.35;
+      color: #000;
+    }
+
+    .exec-article-body {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 0.75rem;
+    }
+
+    .exec-article-footer {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 0.6rem;
+      border-top: 1px solid rgba(107,127,106,0.12);
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
     /* ===== CEO TAB HIGHLIGHT ===== */
     .nav-tab.ceo-tab {
       background: rgba(107, 127, 106, 0.1);
@@ -1317,6 +1445,17 @@
       </div>
     </div>
 
+    <!-- BREAKING NEWS -->
+    <div class="section fade-in" style="margin-bottom:1.5rem;">
+      <div class="section-header">
+        <div class="section-title" style="color:#a63d3d;">&#x1F6A8; Breaking News &mdash; Cyber &amp; Macro Impact</div>
+        <span class="section-badge badge-critical">Heute</span>
+      </div>
+      <div class="news-grid" id="breakingNewsItems">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
     <!-- STATS ROW -->
     <div class="stats-row">
       <div class="stat-card critical fade-in stagger-1 has-info">
@@ -1501,6 +1640,7 @@
       <button class="nav-tab" onclick="showTab('finance')">03 Financial Impact</button>
       <button class="nav-tab" onclick="showTab('actions')">04 Actionable Insights</button>
       <button class="nav-tab" onclick="showTab('changelog')">05 Changelog</button>
+      <button class="nav-tab" onclick="showTab('execsummary')">06 Executive Summaries</button>
       <button class="nav-tab ceo-tab" onclick="showTab('ceo')">&#x1F3AF; CEO Risk Scorecard</button>
     </div>
 
@@ -1646,11 +1786,27 @@
       </div>
     </div>
 
-    <!-- TAB 6: CEO RISK SCORECARD -->
+    <!-- TAB 6: EXECUTIVE SUMMARIES -->
+    <div class="tab-content" id="tab-execsummary">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><span class="num">06</span> Executive Summaries &mdash; Wochenberichte</div>
+          <span class="section-badge" style="background:rgba(107,127,106,0.1);color:#6b7f6a;border:1px solid rgba(107,127,106,0.3);">Archiv</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:1.25rem;line-height:1.6;">
+          Wochenberichte des CTI-Analysten f&uuml;r CISO und CFO. Jeder Report fasst die wichtigsten Bedrohungen, Schwachstellen und finanziellen Auswirkungen der Woche zusammen. Reports werden dauerhaft archiviert und t&auml;glich erg&auml;nzt.
+        </p>
+        <div id="execSummaryList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 7: CEO RISK SCORECARD -->
     <div class="tab-content" id="tab-ceo">
       <div class="section">
         <div class="section-header">
-          <div class="section-title"><span class="num">06</span> CEO Risk Scorecard &mdash; Mittelstand &amp; Startups</div>
+          <div class="section-title"><span class="num">07</span> CEO Risk Scorecard &mdash; Mittelstand &amp; Startups</div>
           <span class="section-badge badge-critical">Handlungsbedarf</span>
         </div>
 
@@ -1854,7 +2010,7 @@
           <div class="cta-subtitle">
             Sie haben gerade gesehen, wo die Risiken liegen. Unser vCISO-Team pr&uuml;ft in 30 Minuten, ob Ihr Unternehmen von NIS2 betroffen ist, wo Ihre gr&ouml;&szlig;ten L&uuml;cken sind &mdash; und wie Sie Ihre pers&ouml;nliche Haftung sofort reduzieren.
           </div>
-          <a href="https://calendly.com/fabe-woodlandsadvisory/cyber-risk-check-fur-kmu" class="cta-button" id="ctaButton">
+          <a href="#" class="cta-button" id="ctaButton">
             &#x1F4C5; Kostenlosen Check vereinbaren
           </a>
           <div class="cta-features">
@@ -1981,6 +2137,55 @@
         { date: "2026-03-15", text: "[KRITISCH] Stryker Wiper-Angriff durch Handala. SYK -9%. 200.000+ Systeme zerst\u00f6rt." },
         { date: "2026-03-15", text: "[NEU] Chrome Zero-Days CVE-2026-3909/3910 in CISA KEV aufgenommen (12. M\u00e4rz)." },
         { date: "2026-03-15", text: "[NEU] NY DFS Industry Letter: Erh\u00f6hte Warnstufe f\u00fcr Finanzsektor wegen geopolitischer Konflikte (03. M\u00e4rz)." }
+      ],
+      breakingNews: [
+        {
+          date: "15. M\u00e4rz 2026",
+          category: "Supply Chain",
+          title: "GlassWorm eskaliert: 150+ GitHub Repos kompromittiert, npm und VS Code betroffen",
+          summary: "Die GlassWorm-Kampagne hat in der Woche 03.\u201309. M\u00e4rz eine neue Massenwelle gestartet. Unsichtbare Unicode-Payloads infizieren Entwicklermaschinen \u00fcber GitHub, npm und Open VSX gleichzeitig. Solana-Blockchain dient als unzerst\u00f6rbare C2-Infrastruktur.",
+          impact: "Software-Supply-Chain betroffen. Jedes Unternehmen mit npm-Dependencies oder VS Code Extensions muss sofort auditieren. Gesch\u00e4tztes Risiko: \u20ac16\u201376M p.a. (FAIR)."
+        },
+        {
+          date: "13. M\u00e4rz 2026",
+          category: "Ransomware",
+          title: "Stryker-Wiper: Iranische Handala-Gruppe zerst\u00f6rt 200.000+ Systeme in 79 L\u00e4ndern",
+          summary: "Ein destruktiver Wiper-Angriff (kein Ransomware) der iranisch-gelinkten Gruppe Handala hat den Medizintechnik-Konzern Stryker getroffen. 56.000 Mitarbeiter betroffen. Aktie fiel sofort um 9%. Keine M\u00f6glichkeit zur Datenwiederherstellung.",
+          impact: "MedTech- und Manufacturing-Sektor alarmiert. Geopolitische Wiper-Angriffe nehmen zu. Cyber-Versicherungen pr\u00fcfen Exclusions f\u00fcr staatsnahe Angriffe."
+        },
+        {
+          date: "12. M\u00e4rz 2026",
+          category: "Regulatory",
+          title: "NIS2 Enforcement: BSI-Registrierungsfrist abgelaufen \u2014 30.000 Unternehmen unter Aufsicht",
+          summary: "Die Frist zur BSI-Registrierung nach NIS2 ist am 06. M\u00e4rz abgelaufen. Gesch\u00e4ftsf\u00fchrer haften pers\u00f6nlich mit Privatverm\u00f6gen. Bu\u00dfgelder bis \u20ac10M oder 2% des globalen Umsatzes. Experten erwarten 2026 eine Welle beh\u00f6rdlicher Audits.",
+          impact: "Jedes nicht-registrierte Unternehmen hat bereits einen formalen Versto\u00df begangen. D&O-Versicherungen k\u00f6nnen Deckung verweigern. vCISO-Nachfrage steigt sprunghaft."
+        }
+      ],
+      execSummaries: [
+        {
+          date: "15. M\u00e4rz 2026",
+          title: "Wochenreport KW11: Dreifach-Eskalation \u2014 Supply Chain, Wiper, Zero-Days",
+          level: "KRITISCH",
+          levelClass: "crit",
+          body: "Die Woche 09.\u201315. M\u00e4rz markiert eine der kritischsten Bedrohungslagen des Jahres. Die GlassWorm-Supply-Chain-Kampagne hat mit 150+ kompromittierten GitHub-Repositories eine neue Dimension erreicht. Gleichzeitig demonstriert der Handala-Wiper-Angriff auf Stryker (200.000 Systeme, 79 L\u00e4nder, SYK -9%) die wachsende Gefahr geopolitisch motivierter destruktiver Cyberangriffe auf den Industriesektor. Chrome Zero-Days (CVE-2026-3909/3910) betreffen Milliarden Nutzer. Empfehlung: Sofortiger Audit aller Software-Dependencies, Cisco SD-WAN Patch (CISA ED 26-03), Chrome-Update auf allen Endpunkten.",
+          sources: "CISA, BSI, IBM X-Force, SecurityWeek, Hacker News"
+        },
+        {
+          date: "08. M\u00e4rz 2026",
+          title: "Wochenreport KW10: NIS2-Enforcement beginnt, F5-Quellcode-Leak eskaliert",
+          level: "HOCH",
+          levelClass: "high",
+          body: "Mit Ablauf der BSI-Registrierungsfrist am 06. M\u00e4rz beginnt die aktive Durchsetzung des NIS2-Umsetzungsgesetzes f\u00fcr ~30.000 deutsche Unternehmen. Parallel eskaliert der F5 BIG-IP Quellcode-Diebstahl (CISA ED 26-01): Ein staatlicher Akteur besitzt jetzt propriet\u00e4ren Source Code, der Schwachstellenanalyse bei 48 der Fortune-50 erm\u00f6glicht. Camaro Dragon (China-linked) intensiviert Operationen gegen den Golf-Energiesektor mit PlugX und Cobalt Strike. Empfehlung: NIS2-Registrierung sofort nachholen, F5-Systeme inventarisieren, Gulf-Energy-Kunden warnen.",
+          sources: "BSI, CISA, NY DFS, Eye Security"
+        },
+        {
+          date: "01. M\u00e4rz 2026",
+          title: "Wochenreport KW9: Credential Theft Welle, NCSC/CISA OT-Guidance ver\u00f6ffentlicht",
+          level: "MITTEL",
+          levelClass: "med",
+          body: "Gro\u00dfangelegte Credential-Theft-Operationen pr\u00e4gen die Woche. Angreifer nutzen KI-generierte Phishing-Seiten, die legitime Login-Portale von Cloud-Diensten imitieren. 82,6% aller Phishing-Mails sind mittlerweile KI-generiert (KnowBe4). Positiv: NCSC und CISA ver\u00f6ffentlichen gemeinsam mit BSI und internationalen Partnern die \u201eSecure Connectivity Principles for OT\u201c \u2014 erstmals wird Push-Only-Architektur und Hardware-enforced Security f\u00fcr OT-Netzwerke empfohlen. Empfehlung: Phishing-Simulationen intensivieren, OT-Guidance evaluieren.",
+          sources: "NCSC, CISA, BSI, KnowBe4, Eye Security IR Report"
+        }
       ]
     };
 
@@ -2336,6 +2541,61 @@
       },
       options: makeOpts(function(v) { return v + '%'; })
     });
+
+    // ===== FIX: MOVE ALL POPUPS TO BODY LEVEL =====
+    // This ensures popups are never clipped by overflow:hidden parents
+    var popupContainer = document.createElement('div');
+    popupContainer.id = 'popup-layer';
+    popupContainer.style.cssText = 'position:fixed;top:0;left:0;width:0;height:0;z-index:99999;pointer-events:none;';
+    document.body.appendChild(popupContainer);
+    document.querySelectorAll('.info-popup').forEach(function(p) {
+      popupContainer.appendChild(p);
+      p.style.pointerEvents = 'auto';
+    });
+
+    // ===== BREAKING NEWS =====
+    function renderBreakingNews() {
+      var el = document.getElementById('breakingNewsItems');
+      if (!el) return;
+      var news = DASHBOARD_DATA.breakingNews || [];
+      el.innerHTML = news.map(function(n) {
+        var tagColor = n.category === 'Ransomware' ? 'var(--critical)' : n.category === 'Supply Chain' ? 'var(--high)' : n.category === 'Regulatory' ? 'var(--accent-blue)' : '#6b7f6a';
+        var tagBg = n.category === 'Ransomware' ? 'var(--critical-bg)' : n.category === 'Supply Chain' ? 'var(--high-bg)' : n.category === 'Regulatory' ? 'var(--medium-bg)' : 'rgba(107,127,106,0.07)';
+        return '<div class="news-card">' +
+          '<div class="news-card-header">' +
+            '<span class="news-tag" style="color:' + tagColor + ';background:' + tagBg + ';border:1px solid ' + tagColor + ';">' + n.category + '</span>' +
+            '<span class="news-date">' + n.date + '</span>' +
+          '</div>' +
+          '<div class="news-title">' + n.title + '</div>' +
+          '<div class="news-body">' + n.summary + '</div>' +
+          '<div class="news-impact"><strong>Impact:</strong> ' + n.impact + '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // ===== EXECUTIVE SUMMARIES =====
+    function renderExecSummaries() {
+      var el = document.getElementById('execSummaryList');
+      if (!el) return;
+      var summaries = DASHBOARD_DATA.execSummaries || [];
+      el.innerHTML = summaries.map(function(s) {
+        return '<article class="exec-article">' +
+          '<div class="exec-article-header">' +
+            '<div class="exec-article-date">' + s.date + '</div>' +
+            '<span class="severity ' + s.levelClass + '">' + s.level + '</span>' +
+          '</div>' +
+          '<h3 class="exec-article-title">' + s.title + '</h3>' +
+          '<p class="exec-article-body">' + s.body + '</p>' +
+          '<div class="exec-article-footer">' +
+            '<span class="exec-author">CTI Analyst Report</span>' +
+            '<span class="exec-sources">' + s.sources + '</span>' +
+          '</div>' +
+        '</article>';
+      }).join('');
+    }
+
+    renderBreakingNews();
+    renderExecSummaries();
   </script>
 </body>
 </html>
