@@ -52,6 +52,46 @@
       min-height: 100vh;
     }
 
+    /* ===== LANGUAGE TOGGLE ===== */
+    .lang-toggle {
+      display: flex;
+      gap: 0.25rem;
+      background: rgba(107,127,106,0.06);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.2rem;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.55rem;
+      border: none;
+      border-radius: 4px;
+      background: transparent;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all 0.15s ease;
+      line-height: 1;
+    }
+
+    .lang-btn:hover { color: var(--text-primary); background: rgba(107,127,106,0.08); }
+    .lang-btn.active { color: #fff; background: #6b7f6a; }
+
+    .lang-flag {
+      width: 18px;
+      height: 12px;
+      border-radius: 2px;
+      overflow: hidden;
+      display: inline-block;
+      flex-shrink: 0;
+      border: 0.5px solid rgba(0,0,0,0.1);
+    }
+
     /* ===== SUBTLE TEXTURE ===== */
     body::before {
       content: '';
@@ -96,12 +136,12 @@
     .logo-icon {
       width: 44px;
       height: 44px;
-      background: #ffffff;
-      border-radius: 10px;
+      background: transparent;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1.5px solid #6b7f6a;
+      border: none;
       overflow: hidden;
       flex-shrink: 0;
     }
@@ -1417,13 +1457,23 @@
   <header class="header">
     <div class="header-inner">
       <div class="header-left">
-        <div class="logo-icon"><img src="data:image/png;base64,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" alt="Woodlands Advisory" style="width:36px;height:36px;object-fit:contain;"></div>
+        <div class="logo-icon"><img src="data:image/png;base64,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" alt="Woodlands Advisory" style="width:36px;height:36px;object-fit:contain;"></div>
         <div>
           <div class="header-title">Cyber-Financial Intelligence Dashboard</div>
           <div class="header-subtitle">Powered by Woodlands Advisory &bull; Dynamic Real-Time Intelligence</div>
         </div>
       </div>
       <div class="header-right">
+        <div class="lang-toggle">
+          <button class="lang-btn active" id="lang-de" onclick="setLang('de')">
+            <svg class="lang-flag" viewBox="0 0 18 12"><rect width="18" height="4" fill="#000"/><rect y="4" width="18" height="4" fill="#D00"/><rect y="8" width="18" height="4" fill="#FFCE00"/></svg>
+            DE
+          </button>
+          <button class="lang-btn" id="lang-en" onclick="setLang('en')">
+            <svg class="lang-flag" viewBox="0 0 18 12"><rect width="18" height="12" fill="#012169"/><path d="M0,0L18,12M18,0L0,12" stroke="#fff" stroke-width="2.4"/><path d="M0,0L18,12M18,0L0,12" stroke="#C8102E" stroke-width="1.2"/><rect x="7.5" width="3" height="12" fill="#fff"/><rect y="4.5" width="18" height="3" fill="#fff"/><rect x="8.25" width="1.5" height="12" fill="#C8102E"/><rect y="5.0" width="18" height="2" fill="#C8102E"/></svg>
+            EN
+          </button>
+        </div>
         <div class="status-badge status-live">
           <div class="status-dot"></div>
           Living Document
@@ -2106,69 +2156,69 @@
       threats: [
         {
           name: "GlassWorm Supply Chain Worm",
-          vector: "Software Supply Chain (VS Code / npm / GitHub)",
-          actor: "Organisierte Cyberkriminalit\u00e4t (finanziell); RU-nexus",
-          velocity: "150+ GitHub Repos, 72+ Open VSX Extensions, 35.800+ Installationen",
+          vector: "Software Supply Chain (VS Code / npm / GitHub)", vector_en: "Software supply chain (VS Code / npm / GitHub)",
+          actor: "Organisierte Cyberkriminalit\u00e4t (finanziell); RU-nexus", actor_en: "Organized cybercrime (financial); RU-nexus",
+          velocity: "150+ GitHub Repos, 72+ Open VSX Extensions, 35.800+ Installationen", velocity_en: "150+ GitHub repos, 72+ Open VSX extensions, 35,800+ installations",
           severity: "crit",
-          tag: "KRITISCH"
+          tag: "KRITISCH", tag_en: "CRITICAL"
         },
         {
           name: "Cisco SD-WAN CVE-2026-20127",
-          vector: "Authentication Bypass / Zero-Day (aktiv seit 2023)",
-          actor: "UAT-8616 (APT, geopolitisch)",
-          velocity: "CISA ED 26-03; verteilte Enterprise-Netzwerke global",
+          vector: "Authentication Bypass / Zero-Day (aktiv seit 2023)", vector_en: "Authentication bypass / zero-day (actively exploited since 2023)",
+          actor: "UAT-8616 (APT, geopolitisch)", actor_en: "UAT-8616 (APT, geopolitical)",
+          velocity: "CISA ED 26-03; verteilte Enterprise-Netzwerke global", velocity_en: "CISA ED 26-03; distributed enterprise networks globally",
           severity: "crit",
-          tag: "KRITISCH"
+          tag: "KRITISCH", tag_en: "CRITICAL"
         },
         {
           name: "Stryker Wiper (Handala/Iran)",
-          vector: "Destructive Wiper (kein Ransomware)",
-          actor: "Handala (geopolitisch/ideologisch); Iran-nexus",
-          velocity: "200.000+ Systeme, 56.000 Mitarbeiter, 79 L\u00e4nder",
+          vector: "Destructive Wiper (kein Ransomware)", vector_en: "Destructive wiper (no ransomware)",
+          actor: "Handala (geopolitisch/ideologisch); Iran-nexus", actor_en: "Handala (geopolitical/ideological); Iran-nexus",
+          velocity: "200.000+ Systeme, 56.000 Mitarbeiter, 79 L\u00e4nder", velocity_en: "200,000+ systems, 56,000 employees, 79 countries",
           severity: "crit",
-          tag: "KRITISCH"
+          tag: "KRITISCH", tag_en: "CRITICAL"
         },
         {
           name: "Chrome Zero-Days CVE-2026-3909/3910",
-          vector: "Browser-Exploits (OOB write, V8 RCE)",
-          actor: "Unbekannt (Google best\u00e4tigt aktive Ausnutzung)",
-          velocity: "Milliarden Chrome-Nutzer global exponiert",
+          vector: "Browser-Exploits (OOB write, V8 RCE)", vector_en: "Browser exploits (OOB write, V8 RCE)",
+          actor: "Unbekannt (Google best\u00e4tigt aktive Ausnutzung)", actor_en: "Unknown (Google confirms active exploitation)",
+          velocity: "Milliarden Chrome-Nutzer global exponiert", velocity_en: "Billions of Chrome users globally exposed",
           severity: "high",
-          tag: "NEU"
+          tag: "NEU", tag_en: "NEW"
         },
         {
           name: "F5 BIG-IP Source Code Exfiltration",
-          vector: "Nation-State Source Code Theft",
-          actor: "Staatlicher Akteur (geopolitisch)",
-          velocity: "CISA ED 26-01; latentes Risiko bei 48 Fortune-50",
+          vector: "Nation-State Source Code Theft", vector_en: "Nation-state source code theft",
+          actor: "Staatlicher Akteur (geopolitisch)", actor_en: "State-sponsored actor (geopolitical)",
+          velocity: "CISA ED 26-01; latentes Risiko bei 48 Fortune-50", velocity_en: "CISA ED 26-01; latent risk for 48 Fortune-50 companies",
           severity: "high",
-          tag: "NEU"
+          tag: "NEU", tag_en: "NEW"
         },
         {
           name: "Qualcomm CVE-2026-21385 (234 Chipsets)",
-          vector: "Firmware-level Integer Overflow",
-          actor: "Unbekannt (aktiv exploited ITW)",
-          velocity: "234 Chipsets, BYOD weltweit; Patch via OTA verz\u00f6gert",
+          vector: "Firmware-level Integer Overflow", vector_en: "Firmware-level integer overflow",
+          actor: "Unbekannt (aktiv exploited ITW)", actor_en: "Unknown (actively exploited ITW)",
+          velocity: "234 Chipsets, BYOD weltweit; Patch via OTA verz\u00f6gert", velocity_en: "234 chipsets, BYOD worldwide; OTA patch delayed",
           severity: "high",
-          tag: ""
+          tag: "", tag_en: ""
         },
         {
           name: "Camaro Dragon / PlugX (Qatar)",
-          vector: "AI-driven Phishing + Spear-Phishing",
-          actor: "China-linked APT (Energie/Milit\u00e4r)",
-          velocity: "Gezielt auf Golf-Energiesektor",
+          vector: "AI-driven Phishing + Spear-Phishing", vector_en: "AI-driven phishing + spear-phishing",
+          actor: "China-linked APT (Energie/Milit\u00e4r)", actor_en: "China-linked APT (energy/military)",
+          velocity: "Gezielt auf Golf-Energiesektor", velocity_en: "Targeting Gulf energy sector",
           severity: "med",
-          tag: ""
+          tag: "", tag_en: ""
         }
       ],
       vulns: [
-        { cve: "CVE-2026-20127", name: "Cisco SD-WAN", sectors: "Fintech, Cloud, Krit. Infrastruktur, Telko", cvss: "10.0", cvssClass: "crit", exploit: "Weaponized (seit 2023)", urgency: 10, status: "CISA ED 26-03" },
-        { cve: "GlassWorm", name: "(kein CVE)", sectors: "Software-Entwicklung, DevOps, Fintech", cvss: "9.3", cvssClass: "crit", exploit: "Selbst-propagierend", urgency: 10, status: "Aktiv, laufend" },
-        { cve: "CVE-2026-3909/3910", name: "Chrome", sectors: "Alle Sektoren (Browser)", cvss: "8.8", cvssClass: "high", exploit: "Active ITW", urgency: 9, status: "Patch verf\u00fcgbar" },
-        { cve: "CVE-2026-22719", name: "VMware Aria", sectors: "Cloud, Enterprise IT, DevOps", cvss: "8.1", cvssClass: "high", exploit: "KEV-gelistet", urgency: 8, status: "Patch verf\u00fcgbar" },
-        { cve: "CVE-2026-21385", name: "Qualcomm Display", sectors: "Mobile, IoT, BYOD-Enterprise", cvss: "7.8", cvssClass: "high", exploit: "Active ITW", urgency: 7, status: "OTA-Patch pending" },
-        { cve: "CVE-2026-1603", name: "Ivanti EPM", sectors: "Enterprise IT, Managed Services", cvss: "7.5", cvssClass: "high", exploit: "KEV-gelistet", urgency: 8, status: "Patch verf\u00fcgbar" },
-        { cve: "CISA ED 26-01", name: "F5 BIG-IP", sectors: "Fintech, Cloud, Krit. Infrastruktur", cvss: "N/A", cvssClass: "med", exploit: "Latent (Quellcode)", urgency: 7, status: "Inventarisierung" }
+        { cve: "CVE-2026-20127", name: "Cisco SD-WAN", sectors: "Fintech, Cloud, Krit. Infrastruktur, Telko", sectors_en: "Fintech, cloud, critical infrastructure, telco", cvss: "10.0", cvssClass: "crit", exploit: "Weaponized (seit 2023)", exploit_en: "Weaponized (since 2023)", urgency: 10, status: "CISA ED 26-03" },
+        { cve: "GlassWorm", name: "(kein CVE)", sectors: "Software-Entwicklung, DevOps, Fintech", sectors_en: "Software development, DevOps, fintech", cvss: "9.3", cvssClass: "crit", exploit: "Selbst-propagierend", exploit_en: "Self-propagating", urgency: 10, status: "Aktiv, laufend", status_en: "Active, ongoing" },
+        { cve: "CVE-2026-3909/3910", name: "Chrome", sectors: "Alle Sektoren (Browser)", sectors_en: "All sectors (browser)", cvss: "8.8", cvssClass: "high", exploit: "Active ITW", urgency: 9, status: "Patch verf\u00fcgbar", status_en: "Patch available" },
+        { cve: "CVE-2026-22719", name: "VMware Aria", sectors: "Cloud, Enterprise IT, DevOps", sectors_en: "Cloud, enterprise IT, DevOps", cvss: "8.1", cvssClass: "high", exploit: "KEV-gelistet", urgency: 8, status: "Patch verf\u00fcgbar" },
+        { cve: "CVE-2026-21385", name: "Qualcomm Display", sectors: "Mobile, IoT, BYOD-Enterprise", sectors_en: "Mobile, IoT, BYOD enterprise", cvss: "7.8", cvssClass: "high", exploit: "Active ITW", urgency: 7, status: "OTA-Patch pending", status_en: "OTA patch pending" },
+        { cve: "CVE-2026-1603", name: "Ivanti EPM", sectors: "Enterprise IT, Managed Services", sectors_en: "Enterprise IT, managed services", cvss: "7.5", cvssClass: "high", exploit: "KEV-gelistet", urgency: 8, status: "Patch verf\u00fcgbar" },
+        { cve: "CISA ED 26-01", name: "F5 BIG-IP", sectors: "Fintech, Cloud, Krit. Infrastruktur", sectors_en: "Fintech, cloud, critical infrastructure", cvss: "N/A", cvssClass: "med", exploit: "Latent (Quellcode)", exploit_en: "Latent (source code)", urgency: 7, status: "Inventarisierung", status_en: "Asset inventory required" }
       ],
       financials: [
         { name: "Stryker Wiper (Handala)", elm: "$150\u2013400M", market: "SYK \u22129%; MedTech \u22122\u20133%", insurance: "Pr\u00e4mien +15\u201325% Manufacturing; Wiper-Exclusions", systemic: "HOCH", systemicClass: "systemic-high" },
@@ -2202,21 +2252,21 @@
         {
           date: "15. M\u00e4rz 2026",
           category: "Supply Chain",
-          title: "GlassWorm eskaliert: 150+ GitHub Repos kompromittiert, npm und VS Code betroffen",
-          summary: "Die GlassWorm-Kampagne hat in der Woche 03.\u201309. M\u00e4rz eine neue Massenwelle gestartet. Unsichtbare Unicode-Payloads infizieren Entwicklermaschinen \u00fcber GitHub, npm und Open VSX gleichzeitig. Solana-Blockchain dient als unzerst\u00f6rbare C2-Infrastruktur.",
-          impact: "Software-Supply-Chain betroffen. Jedes Unternehmen mit npm-Dependencies oder VS Code Extensions muss sofort auditieren. Gesch\u00e4tztes Risiko: \u20ac16\u201376M p.a. (FAIR)."
+          title: "GlassWorm eskaliert: 150+ GitHub Repos kompromittiert, npm und VS Code betroffen", title_en: "GlassWorm escalates: 150+ GitHub repos compromised, npm and VS Code affected",
+          summary: "Die GlassWorm-Kampagne hat in der Woche 03.\u201309. M\u00e4rz eine neue Massenwelle gestartet. Unsichtbare Unicode-Payloads infizieren Entwicklermaschinen \u00fcber GitHub, npm und Open VSX gleichzeitig. Solana-Blockchain dient als unzerst\u00f6rbare C2-Infrastruktur.", summary_en: "The GlassWorm campaign launched a new mass wave Mar 03\u201309. Invisible Unicode payloads infect developer machines via GitHub, npm and Open VSX simultaneously. Solana blockchain serves as indestructible C2 infrastructure.",
+          impact: "Software-Supply-Chain betroffen. Jedes Unternehmen mit npm-Dependencies oder VS Code Extensions muss sofort auditieren. Gesch\u00e4tztes Risiko: \u20ac16\u201376M p.a. (FAIR).", impact_en: "Software supply chain affected. Every company with npm dependencies or VS Code extensions must audit immediately. Estimated risk: \u20ac16\u201376M p.a. (FAIR)."
         },
         {
           date: "13. M\u00e4rz 2026",
           category: "Ransomware",
-          title: "Stryker-Wiper: Iranische Handala-Gruppe zerst\u00f6rt 200.000+ Systeme in 79 L\u00e4ndern",
+          title: "Stryker-Wiper: Iranische Handala-Gruppe zerst\u00f6rt 200.000+ Systeme in 79 L\u00e4ndern", title_en: "Stryker wiper: Iranian Handala group destroys 200,000+ systems across 79 countries",
           summary: "Ein destruktiver Wiper-Angriff (kein Ransomware) der iranisch-gelinkten Gruppe Handala hat den Medizintechnik-Konzern Stryker getroffen. 56.000 Mitarbeiter betroffen. Aktie fiel sofort um 9%. Keine M\u00f6glichkeit zur Datenwiederherstellung.",
           impact: "MedTech- und Manufacturing-Sektor alarmiert. Geopolitische Wiper-Angriffe nehmen zu. Cyber-Versicherungen pr\u00fcfen Exclusions f\u00fcr staatsnahe Angriffe."
         },
         {
           date: "12. M\u00e4rz 2026",
           category: "Regulatory",
-          title: "NIS2 Enforcement: BSI-Registrierungsfrist abgelaufen \u2014 30.000 Unternehmen unter Aufsicht",
+          title: "NIS2 Enforcement: BSI-Registrierungsfrist abgelaufen \u2014 30.000 Unternehmen unter Aufsicht", title_en: "NIS2 enforcement: BSI registration deadline expired \u2014 30,000 companies under supervision",
           summary: "Die Frist zur BSI-Registrierung nach NIS2 ist am 06. M\u00e4rz abgelaufen. Gesch\u00e4ftsf\u00fchrer haften pers\u00f6nlich mit Privatverm\u00f6gen. Bu\u00dfgelder bis \u20ac10M oder 2% des globalen Umsatzes. Experten erwarten 2026 eine Welle beh\u00f6rdlicher Audits.",
           impact: "Jedes nicht-registrierte Unternehmen hat bereits einen formalen Versto\u00df begangen. D&O-Versicherungen k\u00f6nnen Deckung verweigern. vCISO-Nachfrage steigt sprunghaft."
         }
@@ -2224,7 +2274,7 @@
       execSummaries: [
         {
           date: "15. M\u00e4rz 2026",
-          title: "Wochenreport KW11: Dreifach-Eskalation \u2014 Supply Chain, Wiper, Zero-Days",
+          title: "Wochenreport KW11: Dreifach-Eskalation \u2014 Supply Chain, Wiper, Zero-Days", title_en: "Weekly report CW11: Triple escalation \u2014 Supply chain, wiper, zero-days",
           level: "KRITISCH",
           levelClass: "crit",
           body: "Die Woche 09.\u201315. M\u00e4rz markiert eine der kritischsten Bedrohungslagen des Jahres. Die GlassWorm-Supply-Chain-Kampagne hat mit 150+ kompromittierten GitHub-Repositories eine neue Dimension erreicht. Gleichzeitig demonstriert der Handala-Wiper-Angriff auf Stryker (200.000 Systeme, 79 L\u00e4nder, SYK -9%) die wachsende Gefahr geopolitisch motivierter destruktiver Cyberangriffe auf den Industriesektor. Chrome Zero-Days (CVE-2026-3909/3910) betreffen Milliarden Nutzer. Empfehlung: Sofortiger Audit aller Software-Dependencies, Cisco SD-WAN Patch (CISA ED 26-03), Chrome-Update auf allen Endpunkten.",
@@ -2232,7 +2282,7 @@
         },
         {
           date: "08. M\u00e4rz 2026",
-          title: "Wochenreport KW10: NIS2-Enforcement beginnt, F5-Quellcode-Leak eskaliert",
+          title: "Wochenreport KW10: NIS2-Enforcement beginnt, F5-Quellcode-Leak eskaliert", title_en: "Weekly report CW10: NIS2 enforcement begins, F5 source code leak escalates",
           level: "HOCH",
           levelClass: "high",
           body: "Mit Ablauf der BSI-Registrierungsfrist am 06. M\u00e4rz beginnt die aktive Durchsetzung des NIS2-Umsetzungsgesetzes f\u00fcr ~30.000 deutsche Unternehmen. Parallel eskaliert der F5 BIG-IP Quellcode-Diebstahl (CISA ED 26-01): Ein staatlicher Akteur besitzt jetzt propriet\u00e4ren Source Code, der Schwachstellenanalyse bei 48 der Fortune-50 erm\u00f6glicht. Camaro Dragon (China-linked) intensiviert Operationen gegen den Golf-Energiesektor mit PlugX und Cobalt Strike. Empfehlung: NIS2-Registrierung sofort nachholen, F5-Systeme inventarisieren, Gulf-Energy-Kunden warnen.",
@@ -2240,7 +2290,7 @@
         },
         {
           date: "01. M\u00e4rz 2026",
-          title: "Wochenreport KW9: Credential Theft Welle, NCSC/CISA OT-Guidance ver\u00f6ffentlicht",
+          title: "Wochenreport KW9: Credential Theft Welle, NCSC/CISA OT-Guidance ver\u00f6ffentlicht", title_en: "Weekly report CW9: Credential theft wave, NCSC/CISA OT guidance published",
           level: "MITTEL",
           levelClass: "med",
           body: "Gro\u00dfangelegte Credential-Theft-Operationen pr\u00e4gen die Woche. Angreifer nutzen KI-generierte Phishing-Seiten, die legitime Login-Portale von Cloud-Diensten imitieren. 82,6% aller Phishing-Mails sind mittlerweile KI-generiert (KnowBe4). Positiv: NCSC und CISA ver\u00f6ffentlichen gemeinsam mit BSI und internationalen Partnern die \u201eSecure Connectivity Principles for OT\u201c \u2014 erstmals wird Push-Only-Architektur und Hardware-enforced Security f\u00fcr OT-Netzwerke empfohlen. Empfehlung: Phishing-Simulationen intensivieren, OT-Guidance evaluieren.",
@@ -2251,40 +2301,46 @@
 
     // ===== RENDER FUNCTIONS =====
     function renderThreats() {
+      var L = currentLang;
       const tbody = document.getElementById('threatTableBody');
-      tbody.innerHTML = DASHBOARD_DATA.threats.map(t => `
-        <tr>
-          <td>
-            ${t.tag ? `<span class="severity ${t.severity === 'crit' ? 'crit' : t.tag === 'NEU' ? 'high' : 'med'}" style="margin-right:0.4rem;">${t.tag}</span>` : ''}
-            ${t.name}
-          </td>
-          <td>${t.vector}</td>
-          <td>${t.actor}</td>
-          <td>${t.velocity}</td>
+      tbody.innerHTML = DASHBOARD_DATA.threats.map(t => {
+        var tag = L==='en'&&t.tag_en!==undefined ? t.tag_en : t.tag;
+        var vec = L==='en'&&t.vector_en ? t.vector_en : t.vector;
+        var act = L==='en'&&t.actor_en ? t.actor_en : t.actor;
+        var vel = L==='en'&&t.velocity_en ? t.velocity_en : t.velocity;
+        return `<tr>
+          <td>${tag ? '<span class="severity '+(t.severity==='crit'?'crit':tag==='NEU'||tag==='NEW'?'high':'med')+'" style="margin-right:0.4rem;">'+tag+'</span>' : ''}${t.name}</td>
+          <td>${vec}</td><td>${act}</td><td>${vel}</td>
           <td><span class="severity ${t.severity}">${t.severity === 'crit' ? 'CRITICAL' : t.severity === 'high' ? 'HIGH' : 'MEDIUM'}</span></td>
-        </tr>
-      `).join('');
+        </tr>`;
+      }).join('');
+      // Translate table headers
+      var ths = document.querySelectorAll('#tab-threats thead th');
+      var hDE = ['Bedrohung','Attack Vector','Threat Actor / Motivation','Velocity & Spread','Severity'];
+      var hEN = ['Threat','Attack vector','Threat actor / motivation','Velocity & spread','Severity'];
+      ths.forEach(function(th,i){ th.textContent = L==='en'?hEN[i]:hDE[i]; });
     }
 
     function renderVulns() {
+      var L = currentLang;
       const tbody = document.getElementById('vulnTableBody');
-      tbody.innerHTML = DASHBOARD_DATA.vulns.map(v => `
-        <tr>
+      tbody.innerHTML = DASHBOARD_DATA.vulns.map(v => {
+        var sec = L==='en'&&v.sectors_en ? v.sectors_en : v.sectors;
+        var exp = L==='en'&&v.exploit_en ? v.exploit_en : v.exploit;
+        var sta = L==='en'&&v.status_en ? v.status_en : v.status;
+        return `<tr>
           <td>${v.cve}<br><span style="color:var(--text-muted);font-weight:400;font-size:0.75rem;">${v.name}</span></td>
-          <td>${v.sectors}</td>
+          <td>${sec}</td>
           <td><span class="severity ${v.cvssClass}">${v.cvss}</span></td>
-          <td>${v.exploit}</td>
-          <td>
-            <div class="urgency-bar">
-              <div style="width:80px;height:6px;background:rgba(30,45,74,0.5);border-radius:3px;overflow:hidden;">
-                <div class="urgency-fill u${v.urgency}"></div>
-              </div>
-              <span class="urgency-num" style="color:${v.urgency >= 9 ? 'var(--critical)' : v.urgency >= 7 ? 'var(--high)' : 'var(--accent-blue)'};">${v.urgency}/10</span>
-            </div>
-          </td>
-          <td><span style="font-family:var(--font-mono);font-size:0.72rem;">${v.status}</span></td>
-        </tr>
-      `).join('');
+          <td>${exp}</td>
+          <td><div class="urgency-bar"><div style="width:80px;height:6px;background:rgba(107,127,106,0.15);border-radius:3px;overflow:hidden;"><div class="urgency-fill u${v.urgency}"></div></div><span class="urgency-num" style="color:${v.urgency >= 9 ? 'var(--critical)' : v.urgency >= 7 ? 'var(--high)' : 'var(--accent-blue)'};">${v.urgency}/10</span></div></td>
+          <td><span style="font-family:var(--font-mono);font-size:0.72rem;">${sta}</span></td>
+        </tr>`;
+      }).join('');
+      var ths = document.querySelectorAll('#tab-vulns thead th');
+      var hDE = ['CVE / Bezeichnung','Betroffene Sektoren','CVSS Score','Exploitability','Mitigation Urgency','Status'];
+      var hEN = ['CVE / Identifier','Affected sectors','CVSS score','Exploitability','Mitigation urgency','Status'];
+      ths.forEach(function(th,i){ if(hDE[i]) th.textContent = L==='en'?hEN[i]:hDE[i]; });
     }
 
     function renderFinancials() {
@@ -2615,36 +2671,42 @@
 
     // ===== BREAKING NEWS =====
     function renderBreakingNews() {
+      var L = currentLang;
       var el = document.getElementById('breakingNewsItems');
       if (!el) return;
       var news = DASHBOARD_DATA.breakingNews || [];
       el.innerHTML = news.map(function(n) {
         var tagColor = n.category === 'Ransomware' ? 'var(--critical)' : n.category === 'Supply Chain' ? 'var(--high)' : n.category === 'Regulatory' ? 'var(--accent-blue)' : '#6b7f6a';
         var tagBg = n.category === 'Ransomware' ? 'var(--critical-bg)' : n.category === 'Supply Chain' ? 'var(--high-bg)' : n.category === 'Regulatory' ? 'var(--medium-bg)' : 'rgba(107,127,106,0.07)';
+        var title = L==='en'&&n.title_en ? n.title_en : n.title;
+        var summary = L==='en'&&n.summary_en ? n.summary_en : n.summary;
+        var impact = L==='en'&&n.impact_en ? n.impact_en : n.impact;
         return '<div class="news-card">' +
           '<div class="news-card-header">' +
             '<span class="news-tag" style="color:' + tagColor + ';background:' + tagBg + ';border:1px solid ' + tagColor + ';">' + n.category + '</span>' +
             '<span class="news-date">' + n.date + '</span>' +
           '</div>' +
-          '<div class="news-title">' + n.title + '</div>' +
-          '<div class="news-body">' + n.summary + '</div>' +
-          '<div class="news-impact"><strong>Impact:</strong> ' + n.impact + '</div>' +
+          '<div class="news-title">' + title + '</div>' +
+          '<div class="news-body">' + summary + '</div>' +
+          '<div class="news-impact"><strong>Impact:</strong> ' + impact + '</div>' +
         '</div>';
       }).join('');
     }
 
     // ===== EXECUTIVE SUMMARIES =====
     function renderExecSummaries() {
+      var L = currentLang;
       var el = document.getElementById('execSummaryList');
       if (!el) return;
       var summaries = DASHBOARD_DATA.execSummaries || [];
       el.innerHTML = summaries.map(function(s) {
+        var title = L==='en'&&s.title_en ? s.title_en : s.title;
         return '<article class="exec-article">' +
           '<div class="exec-article-header">' +
             '<div class="exec-article-date">' + s.date + '</div>' +
             '<span class="severity ' + s.levelClass + '">' + s.level + '</span>' +
           '</div>' +
-          '<h3 class="exec-article-title">' + s.title + '</h3>' +
+          '<h3 class="exec-article-title">' + title + '</h3>' +
           '<p class="exec-article-body">' + s.body + '</p>' +
           '<div class="exec-article-footer">' +
             '<span class="exec-author">Woodlands Advisory CTI</span>' +
@@ -2656,6 +2718,211 @@
 
     renderBreakingNews();
     renderExecSummaries();
+
+    // ===== LANGUAGE SYSTEM =====
+    var currentLang = 'de';
+
+    var i18n = {
+      // Header
+      '.header-title': { de: 'Cyber-Financial Intelligence Dashboard', en: 'Cyber-Financial Intelligence Dashboard' },
+      '.header-subtitle': { de: 'Powered by Woodlands Advisory \u2022 Dynamic Real-Time Intelligence', en: 'Powered by Woodlands Advisory \u2022 Dynamic Real-Time Intelligence' },
+
+      // Status & Timestamp prefix
+      '.status-badge.status-live': { de: 'Living Document', en: 'Living Document' },
+    };
+
+    // Tab translations
+    var tabI18n = [
+      { de: '01 Bedrohungslage', en: '01 Threat Landscape' },
+      { de: '02 Schwachstellen', en: '02 Vulnerabilities' },
+      { de: '03 Finanzielle Auswirkungen', en: '03 Financial Impact' },
+      { de: '04 Handlungsempfehlungen', en: '04 Actionable Insights' },
+      { de: '05 Changelog', en: '05 Changelog' },
+      { de: '06 Executive Summaries', en: '06 Executive Summaries' },
+      { de: '\uD83C\uDFAF CEO Risk Scorecard', en: '\uD83C\uDFAF CEO Risk Scorecard' }
+    ];
+
+    // Stat card labels
+    var statLabels = [
+      { de: 'Kritische Bedrohungen', en: 'Critical threats' },
+      { de: 'Aktiv Exploited CVEs', en: 'Actively exploited CVEs' },
+      { de: 'CISA Emergency Directives', en: 'CISA Emergency Directives' },
+      { de: 'Gesch. Gesamtrisiko p.a.', en: 'Est. total risk p.a.' },
+      { de: 'Cyber-Vers. Pr\u00e4mien 2026', en: 'Cyber ins. premiums 2026' }
+    ];
+
+    // Alert banner
+    var alertI18n = {
+      de: { title: 'Kritische Bedrohungslage \u2014 M\u00e4rz 2026', body: 'GlassWorm Supply-Chain-Wurm breitet sich \u00fcber 150+ GitHub Repos, 72 Open VSX Extensions und npm aus. Stryker Wiper-Angriff (Handala/Iran) hat 200.000+ Systeme zerst\u00f6rt. CISA ED 26-03 f\u00fcr Cisco SD-WAN (CVSS 10.0) mit sofortiger Patch-Pflicht.' },
+      en: { title: 'Critical threat level \u2014 March 2026', body: 'GlassWorm supply chain worm spreading across 150+ GitHub repos, 72 Open VSX extensions and npm. Stryker wiper attack (Handala/Iran) destroyed 200,000+ systems. CISA ED 26-03 for Cisco SD-WAN (CVSS 10.0) requiring immediate patching.' }
+    };
+
+    // Breaking News section title
+    var newsTitle = { de: '\uD83D\uDEA8 Breaking News \u2014 Cyber & Macro Impact', en: '\uD83D\uDEA8 Breaking News \u2014 Cyber & Macro Impact' };
+
+    // Chart section titles
+    var chartTitles = {
+      de: { main: 'Bedrohungslage im Zeitverlauf', sub: '7-Tage-Vergleich (09.\u201315. M\u00e4rz 2026) und monatliche Entwicklung', week: '\uD83D\uDCC5 Letzte 7 Tage (09.\u201315. M\u00e4rz 2026)', month: '\uD83D\uDCC8 Monatstrend (Okt 2025 \u2013 M\u00e4rz 2026)' },
+      en: { main: 'Threat landscape over time', sub: '7-day comparison (Mar 09\u201315, 2026) and monthly trend', week: '\uD83D\uDCC5 Last 7 days (Mar 09\u201315, 2026)', month: '\uD83D\uDCC8 Monthly trend (Oct 2025 \u2013 Mar 2026)' }
+    };
+
+    // Timestamp
+    var tsPrefix = { de: 'Letztes Update: ', en: 'Last update: ' };
+
+    // CTA
+    var ctaI18n = {
+      de: { badge: 'Unverbindlich \u2022 15 Minuten \u2022 Vertraulich', title: 'Sprechen Sie mit unserem Team', sub: 'Die Bedrohungslage in diesem Dashboard betrifft Ihr Unternehmen direkt. In einem kurzen Gespr\u00e4ch kl\u00e4ren wir, wo Ihre gr\u00f6\u00dften Risiken liegen und welcher n\u00e4chste Schritt f\u00fcr Sie am meisten bewirkt.', btn: 'Gespr\u00e4ch vereinbaren' },
+      en: { badge: 'No commitment \u2022 15 minutes \u2022 Confidential', title: 'Talk to our team', sub: 'The threats in this dashboard directly affect your business. In a short call we\u2019ll identify your biggest risks and which next step delivers the most impact for you.', btn: 'Schedule a call' }
+    };
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.getElementById('lang-de').classList.toggle('active', lang === 'de');
+      document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+
+      // Tab buttons
+      var tabs = document.querySelectorAll('.nav-tab');
+      tabs.forEach(function(tab, i) {
+        if (tabI18n[i]) tab.textContent = tabI18n[i][lang];
+      });
+
+      // Stat card labels
+      var labels = document.querySelectorAll('.stat-label');
+      labels.forEach(function(el, i) {
+        if (statLabels[i]) el.textContent = statLabels[i][lang];
+      });
+
+      // Alert banner
+      var alertH = document.querySelector('.alert-content h3');
+      var alertP = document.querySelector('.alert-content p');
+      if (alertH) alertH.textContent = alertI18n[lang].title;
+      if (alertP) alertP.textContent = alertI18n[lang].body;
+
+      // Timestamp
+      var d = new Date(DASHBOARD_DATA.lastUpdate);
+      document.getElementById('lastUpdate').textContent = tsPrefix[lang] + d.toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB') + ' ' + d.toLocaleTimeString(lang === 'de' ? 'de-DE' : 'en-GB', {hour:'2-digit',minute:'2-digit'}) + ' UTC';
+
+      // CTA
+      var ctaBadge = document.querySelector('.cta-badge');
+      var ctaTitle = document.querySelector('.cta-title');
+      var ctaSub = document.querySelector('.cta-subtitle');
+      var ctaBtn = document.getElementById('ctaButton');
+      if (ctaBadge) ctaBadge.textContent = ctaI18n[lang].badge;
+      if (ctaTitle) ctaTitle.textContent = ctaI18n[lang].title;
+      if (ctaSub) ctaSub.textContent = ctaI18n[lang].sub;
+      if (ctaBtn) ctaBtn.textContent = ctaI18n[lang].btn;
+
+      // Chart section
+      var chartMain = document.querySelector('.chart-section-title');
+      var chartSub = document.querySelector('.chart-section-sub');
+      if (chartMain) chartMain.textContent = chartTitles[lang].main;
+      if (chartSub) chartSub.textContent = chartTitles[lang].sub;
+
+      // Re-render all dynamic content with new language
+      renderThreats();
+      renderVulns();
+      renderFinancials();
+      renderFair();
+      renderActions();
+      renderChangelog();
+      renderDeadlines();
+      renderReadiness();
+      renderBreakingNews();
+      renderExecSummaries();
+
+      // Section titles
+      var secTitles = {
+        de: ['01 Threat Landscape Summary', '02 Vulnerability & Finding Report', '03 Financial Impact Analysis', '04 Actionable Insights', '05 Living Document \u2014 Aktualisierungsprotokoll', '06 Executive Summaries \u2014 Wochenberichte', '07 CEO Risk Scorecard \u2014 Mittelstand & Startups'],
+        en: ['01 Threat landscape summary', '02 Vulnerability & finding report', '03 Financial impact analysis', '04 Actionable insights', '05 Living document \u2014 Update log', '06 Executive summaries \u2014 Weekly reports', '07 CEO risk scorecard \u2014 SMEs & startups']
+      };
+      document.querySelectorAll('.section-title').forEach(function(el, i) {
+        if (secTitles[lang] && secTitles[lang][i]) {
+          var num = el.querySelector('.num');
+          var numHtml = num ? num.outerHTML + ' ' : '';
+          el.innerHTML = numHtml + secTitles[lang][i].replace(/^\d+ /, '');
+        }
+      });
+
+      // Ampel cards
+      var ampelTitles = {
+        de: ['NIS2 Gesch\u00e4ftsf\u00fchrer\xadhaftung', 'D&O-Versicherungs\xadl\u00fccke', 'Pflicht-Schulung GF'],
+        en: ['NIS2 personal director liability', 'D&O insurance gap', 'Mandatory executive training']
+      };
+      var ampelDetails = {
+        de: [
+          '<strong style="color:var(--critical);">Sie haften mit Ihrem Privatverm\u00f6gen.</strong> Seit M\u00e4rz 2026 gilt die volle NIS2-Durchsetzung. 30.000 Unternehmen in DE betroffen. Bu\u00dfgelder bis <strong>10 Mio. \u20ac</strong> oder <strong>2% des globalen Umsatzes</strong>. Ohne dokumentierte Ma\u00dfnahmen = Pflichtversto\u00df.',
+          'Bei NIS2-Verst\u00f6\u00dfen geht die D&O-Versicherung von <strong>Fahrl\u00e4ssigkeit</strong> aus und verweigert die Schadensregulierung. Kein ISMS = kein Versicherungsschutz f\u00fcr den Gesch\u00e4ftsf\u00fchrer. Pr\u00fcfen Sie <em>heute</em> Ihre Police.',
+          'NIS2 verpflichtet Gesch\u00e4ftsf\u00fchrer zur <strong>pers\u00f6nlichen</strong> Teilnahme an Cybersecurity-Schulungen \u2014 mindestens alle 3 Jahre. Die Schulungspflicht ist <strong>nicht delegierbar</strong>. Fehlender Nachweis = Haftungsrisiko.'
+        ],
+        en: [
+          '<strong style="color:var(--critical);">You are personally liable with your private assets.</strong> Full NIS2 enforcement since March 2026. 30,000 companies in Germany affected. Fines up to <strong>\u20ac10M</strong> or <strong>2% of global revenue</strong>. No documented measures = compliance violation.',
+          'In case of NIS2 violations, D&O insurance assumes <strong>negligence</strong> and will likely refuse to pay claims. No ISMS = no insurance coverage for the managing director. Review your policy <em>today</em>.',
+          'NIS2 requires managing directors to <strong>personally</strong> attend cybersecurity training \u2014 at least every 3 years. This obligation <strong>cannot be delegated</strong>. Missing proof = liability risk.'
+        ]
+      };
+      document.querySelectorAll('.ampel-title').forEach(function(el, i) {
+        if (ampelTitles[lang] && ampelTitles[lang][i]) el.innerHTML = ampelTitles[lang][i];
+      });
+      document.querySelectorAll('.ampel-detail').forEach(function(el, i) {
+        if (ampelDetails[lang] && ampelDetails[lang][i]) el.innerHTML = ampelDetails[lang][i];
+      });
+
+      // CEO metric labels and subs
+      var metricLabels = {
+        de: ['Durchschn. Kosten eines Vorfalls','Tage Stillstand nach Ransomware','Aktienkurs-Einbruch nach Breach','Ersparnis mit KI-Security-Tools','Betroffene dt. Unternehmen (3 Jahre)','Gesamtschaden DE 2025','KI-generierte Phishing-Mails','Cyber-Versicherbarkeits-Trend'],
+        en: ['Avg. cost per incident','Days of downtime after ransomware','Stock price drop after breach','Savings with AI security tools','Affected German companies (3 years)','Total damage Germany 2025','AI-generated phishing emails','Cyber insurability trend']
+      };
+      document.querySelectorAll('.ceo-metric-label').forEach(function(el, i) {
+        if (metricLabels[lang] && metricLabels[lang][i]) el.textContent = metricLabels[lang][i];
+      });
+
+      // Info popup titles and bodies
+      var popupI18n = {
+        'info-crit': { de: {t:'Kritische Bedrohungen',b:'Anzahl der aktuell aktiven Bedrohungen mit Severity \u201eCritical\u201c. Eine Bedrohung gilt als kritisch, wenn sie aktiv ausgenutzt wird, CVSS \u2265 9.0 aufweist oder eine CISA Emergency Directive ausgel\u00f6st hat. Warum relevant: Jede kritische Bedrohung erfordert sofortige Ma\u00dfnahmen innerhalb von 24\u201372h.'}, en: {t:'Critical threats',b:'Number of currently active threats with severity \u201cCritical\u201d. A threat is classified as critical when actively exploited in the wild, CVSS \u2265 9.0, or a CISA Emergency Directive has been issued. Why it matters: Each critical threat requires immediate action within 24\u201372h.'} },
+        'info-cve': { de: {t:'Aktiv ausgenutzte Schwachstellen (CVEs)',b:'CVE = Common Vulnerabilities and Exposures \u2014 eine standardisierte Kennung f\u00fcr bekannte Sicherheitsl\u00fccken. \u201eAktiv exploited\u201c bedeutet, dass Angreifer diese L\u00fccken gerade jetzt ausnutzen. Das BSI entdeckt durchschnittlich 119 neue Schwachstellen pro Tag.'}, en: {t:'Actively exploited vulnerabilities (CVEs)',b:'CVE = Common Vulnerabilities and Exposures \u2014 a standardized identifier for known security flaws. \u201cActively exploited\u201d means attackers are using these flaws right now. BSI discovers an average of 119 new vulnerabilities per day.'} },
+        'info-ed': { de: {t:'CISA Emergency Directives',b:'Emergency Directives sind Notfall-Anordnungen der US-Cybersicherheitsbeh\u00f6rde CISA bei akuter Bedrohung. F\u00fcr EU-Unternehmen sind sie ein Fr\u00fchwarnsignal.'}, en: {t:'CISA Emergency Directives',b:'Emergency Directives are urgent orders from US cybersecurity agency CISA during acute threats. For EU companies they serve as an early warning signal.'} },
+        'info-fair': { de: {t:'FAIR-Risikomodell',b:'FAIR = Factor Analysis of Information Risk. Ein quantitatives Modell zur Berechnung von Cyberrisiken in Euro. Formel: R = P \u00d7 (L\u2081 + L\u2082).'}, en: {t:'FAIR risk model',b:'FAIR = Factor Analysis of Information Risk. A quantitative model for calculating cyber risks in monetary terms. Formula: R = P \u00d7 (L\u2081 + L\u2082).'} },
+        'info-ins': { de: {t:'Cyber-Versicherungspr\u00e4mien',b:'Globale Cyber-Versicherungspr\u00e4mien erreichen 2026 ca. $16\u201323 Mrd. Versicherer verlangen zunehmend MFA, ISMS und Incident-Response-Pl\u00e4ne als Voraussetzung f\u00fcr Deckung.'}, en: {t:'Cyber insurance premiums',b:'Global cyber insurance premiums reach approx. $16\u201323B in 2026. Insurers increasingly require MFA, ISMS and incident response plans as prerequisites for coverage.'} }
+      };
+      Object.keys(popupI18n).forEach(function(id) {
+        var popup = document.getElementById(id);
+        if (!popup) return;
+        var data = popupI18n[id][lang];
+        var titleEl = popup.querySelector('.info-popup-title');
+        var bodyEl = popup.querySelector('.info-popup-body');
+        if (titleEl && data.t) titleEl.textContent = data.t;
+        if (bodyEl && data.b) bodyEl.textContent = data.b;
+      });
+
+      // Services section title
+      var svcTitle = document.querySelector('[style*="Diese Risiken"]');
+      if (!svcTitle) {
+        document.querySelectorAll('.section-title').forEach(function(el) {
+          if (el.textContent.indexOf('Diese Risiken') > -1 || el.textContent.indexOf('Solving these risks') > -1) svcTitle = el;
+        });
+      }
+
+      // CTA features
+      var ctaFeats = {
+        de: ['NIS2-Betroffenheitspr\u00fcfung','Compliance-Readiness-Check','Individuelle Roadmap','Keine Vertragsbindung'],
+        en: ['NIS2 applicability check','Compliance readiness check','Individual roadmap','No contract commitment']
+      };
+      document.querySelectorAll('.cta-feature').forEach(function(el, i) {
+        if (ctaFeats[lang] && ctaFeats[lang][i]) {
+          el.innerHTML = '<span class="check">\u2713</span> ' + ctaFeats[lang][i];
+        }
+      });
+
+      // Insurance cards
+      var insCards = document.querySelectorAll('.ins-card h4');
+      var insH = {
+        de: ['Globale Pr\u00e4mien 2026','Kostensteigerung bei Renewal','Neue Exclusions 2026','Unternehmen mit ISMS','Budget-Erh\u00f6hung geplant','CEOs sehen Security als Wachstum'],
+        en: ['Global premiums 2026','Cost increase at renewal','New exclusions 2026','Companies with ISMS','Budget increase planned','CEOs see security as growth']
+      };
+      insCards.forEach(function(el, i) {
+        if (insH[lang] && insH[lang][i]) el.textContent = insH[lang][i];
+      });
+    }
   </script>
 </body>
 </html>
