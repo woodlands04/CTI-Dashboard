@@ -1755,7 +1755,14 @@
     <div class="tab-content" id="tab-finance">
       <div class="section">
         <div class="section-header">
-          <div class="section-title"><span class="num">03</span> Financial Impact Analysis</div>
+          <div class="section-title"><span class="num">03</span> <span data-de="Financial Impact Analysis" data-en="Financial impact analysis">Financial Impact Analysis</span></div>
+          <span class="info-btn" onclick="toggleInfo(event,'info-fin-method')" style="margin-left:auto;">i</span>
+          <div class="info-popup" id="info-fin-method">
+            <button class="info-popup-close" onclick="closeInfo('info-fin-method')">&times;</button>
+            <div class="info-popup-title"><span data-de="Methodik: Financial Impact" data-en="Methodology: Financial impact">Methodik: Financial Impact</span></div>
+            <div class="info-popup-body"><span data-de="Die ELM (Estimated Loss Magnitude) aggregiert direkte Kosten (Incident Response, Forensik, System-Rebuild), regulatorische Bu&szlig;gelder (DSGVO bis 4% Umsatz, NIS2 bis &euro;10M) und indirekte Kosten (Reputationsschaden, Produktionsausfall). Market Volatility basiert auf empirischen Studien zu Aktienkursreaktionen nach Cybervorf&auml;llen (Comparitech: &empty; -7,27%). Versicherungs-Implikationen reflektieren aktuelle Underwriting-Trends (S&amp;P, Swiss Re, Marsh)." data-en="ELM (Estimated Loss Magnitude) aggregates direct costs (incident response, forensics, system rebuild), regulatory fines (GDPR up to 4% of revenue, NIS2 up to &euro;10M) and indirect costs (reputational damage, production downtime). Market volatility is based on empirical studies of stock price reactions after cyber incidents (Comparitech: avg. -7.27%). Insurance implications reflect current underwriting trends (S&amp;P, Swiss Re, Marsh).">Die ELM (Estimated Loss Magnitude) aggregiert direkte Kosten (Incident Response, Forensik, System-Rebuild), regulatorische Bu&szlig;gelder (DSGVO bis 4% Umsatz, NIS2 bis &euro;10M) und indirekte Kosten (Reputationsschaden, Produktionsausfall). Market Volatility basiert auf empirischen Studien zu Aktienkursreaktionen nach Cybervorf&auml;llen (Comparitech: &empty; -7,27%). Versicherungs-Implikationen reflektieren aktuelle Underwriting-Trends (S&amp;P, Swiss Re, Marsh).</span></div>
+            <div class="info-popup-source">FAIR Institute, IBM Cost of a Data Breach 2025, Comparitech, S&amp;P Global</div>
+          </div>
         </div>
 
         <div class="fin-grid" id="finGrid">
@@ -1764,7 +1771,16 @@
 
         <!-- FAIR Model -->
         <div class="fair-section" style="margin-top: 1.5rem;">
-          <div class="fair-title"><span data-de="FAIR-Risikomodell (Factor Analysis of Information Risk)" data-en="FAIR risk model (Factor Analysis of Information Risk)">FAIR-Risikomodell (Factor Analysis of Information Risk)</span></div>
+          <div class="fair-title" style="display:flex;align-items:center;gap:0.5rem;">
+            <span data-de="FAIR-Risikomodell (Factor Analysis of Information Risk)" data-en="FAIR risk model (Factor Analysis of Information Risk)">FAIR-Risikomodell (Factor Analysis of Information Risk)</span>
+            <span class="info-btn" onclick="toggleInfo(event,'info-fair-detail')">i</span>
+            <div class="info-popup" id="info-fair-detail">
+              <button class="info-popup-close" onclick="closeInfo('info-fair-detail')">&times;</button>
+              <div class="info-popup-title"><span data-de="FAIR-Methodik im Detail" data-en="FAIR methodology in detail">FAIR-Methodik im Detail</span></div>
+              <div class="info-popup-body"><span data-de="R = P &times; (L1 + L2). P = Eintrittswahrscheinlichkeit pro Jahr, basierend auf BSI-Statistiken (89% der dt. Unternehmen in 3 Jahren betroffen) und IBM X-Force Daten. L1 = Prim&auml;rverlust (IR, Forensik, Rebuild, Produktionsausfall). L2 = Sekund&auml;rverlust (DSGVO/NIS2-Bu&szlig;gelder, Reputationsschaden, Kundenverlust, Pr&auml;mienanstieg). Konfidenz-Stufen: 1 = Expertenvermutung, 3 = Branchenbenchmarks, 5 = unternehmensspezifische Daten." data-en="R = P &times; (L1 + L2). P = Annual probability of occurrence, based on BSI statistics (89% of German companies affected in 3 years) and IBM X-Force data. L1 = Primary loss (IR, forensics, rebuild, production downtime). L2 = Secondary loss (GDPR/NIS2 fines, reputational damage, customer loss, premium increases). Confidence levels: 1 = expert estimate, 3 = industry benchmarks, 5 = company-specific data.">R = P &times; (L1 + L2). P = Eintrittswahrscheinlichkeit pro Jahr, basierend auf BSI-Statistiken (89% der dt. Unternehmen in 3 Jahren betroffen) und IBM X-Force Daten. L1 = Prim&auml;rverlust (IR, Forensik, Rebuild, Produktionsausfall). L2 = Sekund&auml;rverlust (DSGVO/NIS2-Bu&szlig;gelder, Reputationsschaden, Kundenverlust, Pr&auml;mienanstieg). Konfidenz-Stufen: 1 = Expertenvermutung, 3 = Branchenbenchmarks, 5 = unternehmensspezifische Daten.</span></div>
+              <div class="info-popup-source">The Open Group FAIR, BSI Lagebericht 2025, PwC Digital Trust Insights 2026</div>
+            </div>
+          </div>
           <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;"><span data-de="Annualisiertes Risiko berechnet als:" data-en="Annualized risk calculated as:">Annualisiertes Risiko berechnet als:</span></p>
           <div class="fair-formula">R = P &times; (L&#x2081; + L&#x2082;) &nbsp;&nbsp;|&nbsp;&nbsp; P = Eintrittswahrscheinlichkeit &nbsp;|&nbsp; L&#x2081; = Prim&auml;rverlust &nbsp;|&nbsp; L&#x2082; = Sekund&auml;rverlust</div>
           <div class="table-wrapper" style="margin-top: 1rem;">
@@ -1789,23 +1805,30 @@
         <!-- Insurance -->
         <div style="margin-top: 1.5rem;">
           <div class="section-header">
-            <div class="section-title"><span data-de="Cyber-Versicherungs-Implikationen" data-en="Cyber insurance implications">Cyber-Versicherungs-Implikationen</span></div>
+            <div class="section-title"><span data-de="Cyber-Versicherungs-Implikationen" data-en="Cyber insurance implications">Cyber-Versicherungs-Implikationen</span>
+            <span class="info-btn" onclick="toggleInfo(event,'info-ins-method')" style="margin-left:0.5rem;">i</span>
+            <div class="info-popup" id="info-ins-method">
+              <button class="info-popup-close" onclick="closeInfo('info-ins-method')">&times;</button>
+              <div class="info-popup-title"><span data-de="Versicherungsmarkt-Daten" data-en="Insurance market data">Versicherungsmarkt-Daten</span></div>
+              <div class="info-popup-body"><span data-de="Pr&auml;miendaten basieren auf S&amp;P Global Ratings ($23 Mrd.), Swiss Re ($16,4 Mrd.) und Forrester Research (+15% Wachstum). Die 70% Kostensteigerung stammt aus einer Delinea/Censuswide-Umfrage unter 750 Sicherheitsverantwortlichen. Neue Exclusions werden aus Wiley-Prognosen und Marsh-Reports f&uuml;r 2026 abgeleitet. Versicherer fordern zunehmend MFA, ISMS und Incident-Response-Pl&auml;ne als Mindestvoraussetzung." data-en="Premium data based on S&amp;P Global Ratings ($23B), Swiss Re ($16.4B) and Forrester Research (+15% growth). The 70% cost increase comes from a Delinea/Censuswide survey of 750 security leaders. New exclusions derived from Wiley forecasts and Marsh reports for 2026. Insurers increasingly require MFA, ISMS and incident response plans as minimum prerequisites.">Pr&auml;miendaten basieren auf S&amp;P Global Ratings ($23 Mrd.), Swiss Re ($16,4 Mrd.) und Forrester Research (+15% Wachstum). Die 70% Kostensteigerung stammt aus einer Delinea/Censuswide-Umfrage unter 750 Sicherheitsverantwortlichen. Neue Exclusions werden aus Wiley-Prognosen und Marsh-Reports f&uuml;r 2026 abgeleitet.</span></div>
+              <div class="info-popup-source">S&amp;P Global, Swiss Re, Forrester, Delinea, Marsh, Wiley</div>
+            </div></div>
           </div>
           <div class="insurance-grid">
             <div class="ins-card">
               <h4>Globale Pr&auml;mien 2026</h4>
               <div class="ins-metric up">$16.4&ndash;23B</div>
-              <div class="ins-desc">Swiss Re / S&amp;P Global Ratings Prognose. +15&ndash;20% YoY Wachstum durch KI-bedingte Bedrohungserweiterung.</div>
+              <div class="ins-desc"><span data-de="Swiss Re / S&amp;P Global Ratings Prognose. +15&ndash;20% YoY Wachstum durch KI-bedingte Bedrohungserweiterung." data-en="Swiss Re / S&amp;P Global Ratings forecast. +15&ndash;20% YoY growth driven by AI-related threat expansion.">Swiss Re / S&amp;P Global Ratings Prognose. +15&ndash;20% YoY Wachstum durch KI-bedingte Bedrohungserweiterung.</span></div>
             </div>
             <div class="ins-card">
               <h4>Kostensteigerung bei Renewal</h4>
               <div class="ins-metric up">70%</div>
-              <div class="ins-desc">der Sicherheitsverantwortlichen berichten Pr&auml;mienanstieg. Identity-Security-Controls werden zur Pflicht f&uuml;r Deckung.</div>
+              <div class="ins-desc"><span data-de="der Sicherheitsverantwortlichen berichten Pr&auml;mienanstieg. Identity-Security-Controls werden zur Pflicht f&uuml;r Deckung." data-en="of security leaders report premium increases. Identity security controls becoming mandatory for coverage.">der Sicherheitsverantwortlichen berichten Pr&auml;mienanstieg. Identity-Security-Controls werden zur Pflicht f&uuml;r Deckung.</span></div>
             </div>
             <div class="ins-card">
               <h4>Neue Exclusions 2026</h4>
-              <div class="ins-metric neutral">3 Typen</div>
-              <div class="ins-desc">Geopolitische Wiper, Supply-Chain-Sublimits, KI-Governance-Anforderungen. Wiper-Angriffe zunehmend von Deckung ausgeschlossen.</div>
+              <div class="ins-metric neutral"><span data-de="3 Typen" data-en="3 Types">3 Typen</span></div>
+              <div class="ins-desc"><span data-de="Geopolitische Wiper, Supply-Chain-Sublimits, KI-Governance-Anforderungen. Wiper-Angriffe zunehmend von Deckung ausgeschlossen." data-en="Geopolitical wipers, supply chain sublimits, AI governance requirements. Wiper attacks increasingly excluded from coverage.">Geopolitische Wiper, Supply-Chain-Sublimits, KI-Governance-Anforderungen. Wiper-Angriffe zunehmend von Deckung ausgeschlossen.</span></div>
             </div>
           </div>
         </div>
@@ -2221,10 +2244,10 @@
         { cve: "CISA ED 26-01", name: "F5 BIG-IP", sectors: "Fintech, Cloud, Krit. Infrastruktur", sectors_en: "Fintech, cloud, critical infrastructure", cvss: "N/A", cvssClass: "med", exploit: "Latent (Quellcode)", exploit_en: "Latent (source code)", urgency: 7, status: "Inventarisierung", status_en: "Asset inventory required" }
       ],
       financials: [
-        { name: "Stryker Wiper (Handala)", elm: "$150\u2013400M", market: "SYK \u22129%; MedTech \u22122\u20133%", insurance: "Pr\u00e4mien +15\u201325% Manufacturing; Wiper-Exclusions", systemic: "HOCH", systemicClass: "systemic-high" },
-        { name: "GlassWorm Supply Chain", elm: "$50\u2013200M", market: "DevTool-Sektor unter Druck", insurance: "Supply-Chain-Sublimits versch\u00e4rft", systemic: "SEHR HOCH", systemicClass: "systemic-high" },
-        { name: "Cisco SD-WAN", elm: "$20\u201380M/Firma", market: "CSCO neutral; SASE \u22121\u20132%", insurance: "Erh\u00f6hte Selbstbeteiligung", systemic: "HOCH", systemicClass: "systemic-high" },
-        { name: "F5 BIG-IP Source Leak", elm: "Latent: $500M+", market: "FFIV \u22124\u20136%", insurance: "F5-Inventarisierung als Bedingung", systemic: "SEHR HOCH", systemicClass: "systemic-high" }
+        { name: "Stryker Wiper (Handala)", elm: "$150\u2013400M", market: "SYK \u22129%; MedTech \u22122\u20133%", market_en: "SYK \u22129%; MedTech \u22122\u20133%", insurance: "Pr\u00e4mien +15\u201325% Manufacturing; Wiper-Exclusions", insurance_en: "Premiums +15\u201325% manufacturing; wiper exclusions", systemic: "HOCH", systemicClass: "systemic-high" },
+        { name: "GlassWorm Supply Chain", elm: "$50\u2013200M", market: "DevTool-Sektor unter Druck", market_en: "DevTool sector under pressure", insurance: "Supply-Chain-Sublimits versch\u00e4rft", insurance_en: "Supply chain sublimits tightened", systemic: "SEHR HOCH", systemicClass: "systemic-high" },
+        { name: "Cisco SD-WAN", elm: "$20\u201380M/Firma", market: "CSCO neutral; SASE \u22121\u20132%", market_en: "CSCO neutral; SASE \u22121\u20132%", insurance: "Erh\u00f6hte Selbstbeteiligung", insurance_en: "Increased deductibles", systemic: "HOCH", systemicClass: "systemic-high" },
+        { name: "F5 BIG-IP Source Leak", elm: "Latent: $500M+", market: "FFIV \u22124\u20136%", market_en: "FFIV \u22124\u20136%", insurance: "F5-Inventarisierung als Bedingung", insurance_en: "F5 asset inventory as policy condition", systemic: "SEHR HOCH", systemicClass: "systemic-high" }
       ],
       fair: [
         { scenario: "Supply-Chain-Kompromittierung (GlassWorm)", p: "35\u201345%", l1: "\u20ac15\u201350M", l2: "\u20ac30\u2013120M", r: "\u20ac16\u201376M", conf: "Mittel (FAIR 3)" },
@@ -2233,13 +2256,13 @@
         { scenario: "Mobile Firmware Exploit (BYOD)", p: "25\u201340%", l1: "\u20ac5\u201315M", l2: "\u20ac10\u201330M", r: "\u20ac4\u201318M", conf: "Mittel (FAIR 3)" }
       ],
       actions: [
-        { type: "critical-action", icon: "\uD83D\uDEA8", title: "Cisco SD-WAN: CISA ED 26-03 umsetzen", desc: "Alle Catalyst SD-WAN Systeme inventarisieren, Management-Interfaces isolieren, Patches sofort anwenden. Deadline bereits \u00fcberschritten.", tag: "0\u201324h", tagClass: "tag-critical" },
-        { type: "critical-action", icon: "\uD83D\uDEA8", title: "GlassWorm: VS Code / npm / GitHub Audit", desc: "Anti-Trojan-Source-Tools in CI/CD integrieren. Egress-Monitoring auf Solana-Blockchain und Google-Calendar-C2 implementieren. Alle Extensions pr\u00fcfen.", tag: "0\u201348h", tagClass: "tag-critical" },
-        { type: "critical-action", icon: "\uD83D\uDEA8", title: "Chrome sofort aktualisieren", desc: "Update auf Version 134.0.6998.117/.118 zur Behebung von CVE-2026-3909 und CVE-2026-3910 (aktiv exploited).", tag: "Sofort", tagClass: "tag-critical" },
-        { type: "warn-action", icon: "\uD83D\uDEE1\uFE0F", title: "F5 BIG-IP Inventarisierung (ED 26-01)", desc: "Alle F5-Produkte inventarisieren, Management-Interfaces vom Internet trennen, verst\u00e4rktes Monitoring f\u00fcr anomale Zugriffsmuster.", tag: "0\u201372h", tagClass: "tag-critical" },
-        { type: "info-action", icon: "\uD83D\uDCB0", title: "Strategic Hedge: Software Supply Chain Security", desc: "SBOM f\u00fcr alle Abh\u00e4ngigkeiten, Code-Signierung, Behavioral Detection. Investition: \u20ac200\u2013500K p.a. vs. Risiko \u20ac16\u201376M p.a.", tag: "ROI: Hoch", tagClass: "tag-invest" },
-        { type: "info-action", icon: "\uD83D\uDCB0", title: "Strategic Hedge: Zero Trust Network Architecture", desc: "Microsegmentierung von SD-WAN und Management-Plane. Investition: \u20ac500K\u20131.5M vs. Risiko \u20ac6\u201330M p.a.", tag: "ROI: Hoch", tagClass: "tag-invest" },
-        { type: "info-action", icon: "\uD83D\uDCB0", title: "OT/IT-Konvergenz-Sicherheit", desc: "Hardware-enforced Unidirectional Gateways gem\u00e4\u00df NCSC/CISA Guidance 2026. Besonders relevant nach Stryker-Pr\u00e4zedenzfall.", tag: "ROI: Mittel-Hoch", tagClass: "tag-invest" }
+        { type: "critical-action", icon: "\uD83D\uDEA8", title: "Cisco SD-WAN: CISA ED 26-03 umsetzen", title_en: "Cisco SD-WAN: Implement CISA ED 26-03", desc: "Alle Catalyst SD-WAN Systeme inventarisieren, Management-Interfaces isolieren, Patches sofort anwenden. Deadline bereits \u00fcberschritten.", tag: "0\u201324h", tagClass: "tag-critical" },
+        { type: "critical-action", icon: "\uD83D\uDEA8", title: "GlassWorm: VS Code / npm / GitHub Audit", title_en: "GlassWorm: VS Code / npm / GitHub audit", desc: "Anti-Trojan-Source-Tools in CI/CD integrieren. Egress-Monitoring auf Solana-Blockchain und Google-Calendar-C2 implementieren. Alle Extensions pr\u00fcfen.", tag: "0\u201348h", tagClass: "tag-critical" },
+        { type: "critical-action", icon: "\uD83D\uDEA8", title: "Chrome sofort aktualisieren", title_en: "Update Chrome immediately", desc: "Update auf Version 134.0.6998.117/.118 zur Behebung von CVE-2026-3909 und CVE-2026-3910 (aktiv exploited).", tag: "Sofort", tagClass: "tag-critical" },
+        { type: "warn-action", icon: "\uD83D\uDEE1\uFE0F", title: "F5 BIG-IP Inventarisierung (ED 26-01)", title_en: "F5 BIG-IP asset inventory (ED 26-01)", desc: "Alle F5-Produkte inventarisieren, Management-Interfaces vom Internet trennen, verst\u00e4rktes Monitoring f\u00fcr anomale Zugriffsmuster.", tag: "0\u201372h", tagClass: "tag-critical" },
+        { type: "info-action", icon: "\uD83D\uDCB0", title: "Strategic Hedge: Software Supply Chain Security", title_en: "Strategic hedge: Software supply chain security", desc: "SBOM f\u00fcr alle Abh\u00e4ngigkeiten, Code-Signierung, Behavioral Detection. Investition: \u20ac200\u2013500K p.a. vs. Risiko \u20ac16\u201376M p.a.", tag: "ROI: Hoch", tagClass: "tag-invest" },
+        { type: "info-action", icon: "\uD83D\uDCB0", title: "Strategic Hedge: Zero Trust Network Architecture", title_en: "Strategic hedge: Zero trust network architecture", desc: "Microsegmentierung von SD-WAN und Management-Plane. Investition: \u20ac500K\u20131.5M vs. Risiko \u20ac6\u201330M p.a.", tag: "ROI: Hoch", tagClass: "tag-invest" },
+        { type: "info-action", icon: "\uD83D\uDCB0", title: "OT/IT-Konvergenz-Sicherheit", title_en: "OT/IT convergence security", desc: "Hardware-enforced Unidirectional Gateways gem\u00e4\u00df NCSC/CISA Guidance 2026. Besonders relevant nach Stryker-Pr\u00e4zedenzfall.", tag: "ROI: Mittel-Hoch", tagClass: "tag-invest" }
       ],
       changelog: [
         { date: "2026-03-15", text: "[INITIAL] Dashboard erstellt. Initialer Deep-Scan \u00fcber CISA, BSI, IBM X-Force, WEF, Hacker News, SecurityWeek, Dark Reading.", text_en: "[INITIAL] Dashboard created. Initial deep scan via CISA, BSI, IBM X-Force, WEF, Hacker News, SecurityWeek, Dark Reading." },
@@ -2359,15 +2382,15 @@
             <div class="fin-elm">${f.elm}</div>
           </div>
           <div class="fin-row">
-            <span class="fin-row-label">Market Signal</span>
+            <span class="fin-row-label"><span data-de="Market Signal" data-en="Market signal">Market Signal</span></span>
             <span class="fin-row-value">${f.market}</span>
           </div>
           <div class="fin-row">
-            <span class="fin-row-label">Insurance</span>
+            <span class="fin-row-label"><span data-de="Insurance" data-en="Insurance">Insurance</span></span>
             <span class="fin-row-value">${f.insurance}</span>
           </div>
           <div class="fin-row">
-            <span class="fin-row-label">Systemic Risk</span>
+            <span class="fin-row-label"><span data-de="Systemic Risk" data-en="Systemic risk">Systemic Risk</span></span>
             <span class="fin-row-value ${f.systemicClass}">${f.systemic}</span>
           </div>
         </div>
@@ -2375,31 +2398,42 @@
     }
 
     function renderFair() {
+      var L = currentLang;
+      var fairDE = ['Supply-Chain-Kompromittierung (GlassWorm)','Destruktiver Wiper auf Manufacturing','SD-WAN / Netzwerk-Breach','Mobile Firmware Exploit (BYOD)'];
+      var fairEN = ['Supply chain compromise (GlassWorm)','Destructive wiper on manufacturing','SD-WAN / network breach','Mobile firmware exploit (BYOD)'];
+      var confDE = ['Mittel (FAIR 3)','Niedrig-Mittel (FAIR 2)','Mittel (FAIR 3)','Mittel (FAIR 3)'];
+      var confEN = ['Medium (FAIR 3)','Low-Medium (FAIR 2)','Medium (FAIR 3)','Medium (FAIR 3)'];
       const tbody = document.getElementById('fairTableBody');
-      tbody.innerHTML = DASHBOARD_DATA.fair.map(f => `
-        <tr>
-          <td>${f.scenario}</td>
-          <td><span style="font-family:var(--font-mono);">${f.p}</span></td>
-          <td>${f.l1}</td>
-          <td>${f.l2}</td>
-          <td style="font-weight:600;color:var(--critical);">${f.r}</td>
-          <td style="color:var(--text-muted);">${f.conf}</td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = DASHBOARD_DATA.fair.map(function(f,i) {
+        var sc = L==='en' ? (fairEN[i]||f.scenario) : f.scenario;
+        var co = L==='en' ? (confEN[i]||f.conf) : f.conf;
+        return '<tr><td>'+sc+'</td><td><span style="font-family:var(--font-mono);">'+f.p+'</span></td><td>'+f.l1+'</td><td>'+f.l2+'</td><td style="font-weight:600;color:var(--critical);">'+f.r+'</td><td style="color:var(--text-muted);">'+co+'</td></tr>';
+      }).join('');
+      // FAIR table headers
+      var fths = document.querySelectorAll('#tab-finance .fair-section thead th');
+      var fhDE = ['Szenario','P (p.a.)','L\u2081 Prim\u00e4r','L\u2082 Sekund\u00e4r','R annualisiert','Konfidenz'];
+      var fhEN = ['Scenario','P (p.a.)','L\u2081 Primary','L\u2082 Secondary','R annualized','Confidence'];
+      fths.forEach(function(th,i){ th.textContent = L==='en'?fhEN[i]:fhDE[i]; });
     }
 
     function renderActions() {
+      var L = currentLang;
       const list = document.getElementById('actionList');
-      list.innerHTML = DASHBOARD_DATA.actions.map(a => `
-        <div class="action-item ${a.type}">
+      list.innerHTML = DASHBOARD_DATA.actions.map(a => {
+        var title = L==='en'&&a.title_en ? a.title_en : a.title;
+        var desc = L==='en'&&a.desc_en ? a.desc_en : a.desc;
+        return `<div class="action-item ${a.type}">
           <div class="action-icon">${a.icon}</div>
           <div class="action-body">
-            <h4>${a.title}</h4>
-            <p>${a.desc}</p>
+            <h4>${title}</h4>
+            <p>${desc}</p>
             <span class="action-tag ${a.tagClass}">${a.tag}</span>
           </div>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
+      // Translate section header
+      var secH = document.querySelector('#tab-actions .section-title');
+      if(secH){var n=secH.querySelector('.num');secH.innerHTML=(n?n.outerHTML+' ':'')+(L==='en'?'Actionable insights':'Handlungsempfehlungen');}
     }
 
     function renderChangelog() {
@@ -2893,6 +2927,17 @@
         'info-ed': { de: {t:'CISA Emergency Directives',b:'Emergency Directives sind Notfall-Anordnungen der US-Cybersicherheitsbeh\u00f6rde CISA bei akuter Bedrohung. F\u00fcr EU-Unternehmen sind sie ein Fr\u00fchwarnsignal.'}, en: {t:'CISA Emergency Directives',b:'Emergency Directives are urgent orders from US cybersecurity agency CISA during acute threats. For EU companies they serve as an early warning signal.'} },
         'info-fair': { de: {t:'FAIR-Risikomodell',b:'FAIR = Factor Analysis of Information Risk. Ein quantitatives Modell zur Berechnung von Cyberrisiken in Euro. Formel: R = P \u00d7 (L\u2081 + L\u2082).'}, en: {t:'FAIR risk model',b:'FAIR = Factor Analysis of Information Risk. A quantitative model for calculating cyber risks in monetary terms. Formula: R = P \u00d7 (L\u2081 + L\u2082).'} },
         'info-ins': { de: {t:'Cyber-Versicherungspr\u00e4mien',b:'Globale Cyber-Versicherungspr\u00e4mien erreichen 2026 ca. $16\u201323 Mrd. Versicherer verlangen zunehmend MFA, ISMS und Incident-Response-Pl\u00e4ne als Voraussetzung f\u00fcr Deckung.'}, en: {t:'Cyber insurance premiums',b:'Global cyber insurance premiums reach approx. $16\u201323B in 2026. Insurers increasingly require MFA, ISMS and incident response plans as prerequisites for coverage.'} }
+        'info-trends': { de: {t:'Zeitverlauf der Bedrohungslage',b:'Die Charts zeigen die t\u00e4gliche und monatliche Entwicklung wichtiger Indikatoren.'}, en: {t:'Threat landscape over time',b:'Charts show daily and monthly trends of key indicators.'} },
+        'info-7dinc': { de: {t:'T\u00e4gliche Vorf\u00e4lle (7 Tage)',b:'Aggregierte Cyber-Vorf\u00e4lle pro Tag. Spitzenwert: 14. M\u00e4rz mit 23 Vorf\u00e4llen.'}, en: {t:'Daily incidents (7 days)',b:'Aggregated cyber incidents per day. Peak: March 14 with 23 incidents.'} },
+        'info-7dkev': { de: {t:'CISA KEV-Eintr\u00e4ge pro Tag',b:'Neue Eintr\u00e4ge im CISA Known Exploited Vulnerabilities Catalog. Jeder Eintrag = best\u00e4tigte aktive Ausnutzung.'}, en: {t:'CISA KEV entries per day',b:'New entries in the CISA Known Exploited Vulnerabilities Catalog. Each entry = confirmed active exploitation.'} },
+        'info-cvechart': { de: {t:'Neue Schwachstellen pro Tag',b:'Durchschnittlich 119 neue CVEs/Tag laut BSI \u2014 +24% zum Vorjahr.'}, en: {t:'New vulnerabilities per day',b:'Average 119 new CVEs/day per BSI \u2014 +24% year-over-year.'} },
+        'info-ransom': { de: {t:'Ransomware-Vorf\u00e4lle',b:'~950 Ransomware-Vorf\u00e4lle im BSI-Berichtszeitraum 2025. FCC berichtet Vervierfachung seit 2021.'}, en: {t:'Ransomware incidents',b:'~950 ransomware incidents in BSI reporting period 2025. FCC reports quadrupling since 2021.'} },
+        'info-phish': { de: {t:'KI-generiertes Phishing',b:'82,6% aller Phishing-Mails KI-erstellt. Klickrate 54% vs. 12% manuell.'}, en: {t:'AI-generated phishing',b:'82.6% of phishing emails are AI-generated. Click rate 54% vs. 12% manual.'} },
+        'info-insprem': { de: {t:'Versicherungspr\u00e4mien-Entwicklung',b:'Nach Softening 2023-2025 prognostiziert S&P +15-20% f\u00fcr 2026.'}, en: {t:'Insurance premium trends',b:'After softening 2023-2025, S&P forecasts +15-20% for 2026.'} },
+        'info-cost': { de: {t:'Durchschnittliche Vorfallskosten',b:'IBM: \u20ac4.3M global. F\u00fcr KMU: \u20ac200K-500K. Beinhaltet IR, Forensik, Bu\u00dfgelder, Reputationsschaden.'}, en: {t:'Average incident costs',b:'IBM: \u20ac4.3M globally. For SMEs: \u20ac200K-500K. Includes IR, forensics, fines, reputational damage.'} },
+        'info-downtime': { de: {t:'Betriebsunterbrechungs-Dauer',b:'21-23 Tage bis zur Wiederherstellung nach Ransomware. Tagesumsatz \u00d7 Ausfallzeit = Verlust.'}, en: {t:'Business interruption duration',b:'21-23 days to recovery after ransomware. Daily revenue \u00d7 downtime = loss.'} },
+        'info-stock': { de: {t:'Aktienkurs-Impact nach Breach',b:'\u00d8 -7,27% Kursverfall. Finanzsektor: bis -17%. Erholung 6+ Monate.'}, en: {t:'Stock price impact after breach',b:'Avg. -7.27% stock decline. Finance sector: up to -17%. Recovery 6+ months.'} },
+        'info-roi': { de: {t:'ROI von Security-Investitionen',b:'KI-Security-Tools sparen \u20ac1,9M pro Vorfall. 4/5 Firmen erhalten Pr\u00e4mienreduktion.'}, en: {t:'ROI of security investments',b:'AI security tools save \u20ac1.9M per incident. 4/5 companies receive premium reductions.'} }
       };
       Object.keys(popupI18n).forEach(function(id) {
         var popup = document.getElementById(id);
